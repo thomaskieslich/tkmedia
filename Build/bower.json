@@ -1,0 +1,6 @@
+{
+	"name": "tkplayer",
+	"dependencies": {
+		"plyr": "latest"
+	}
+}
