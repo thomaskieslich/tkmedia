@@ -24,3 +24,5 @@ Build/node_modules/*
 # Ignore composer stuff
 bin/*
 vendor/*
+Build/bower_components/
+Build/node_modules/
