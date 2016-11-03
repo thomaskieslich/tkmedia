@@ -5,10 +5,10 @@
 <f:if condition="{gallery.rows}">
 	<f:if condition="{gallery.position.vertical} == 'intext' ">
 		<f:then>
-			<div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')}  ce-type-{assets.0.type} ce-cols-{gallery.count.columns} ce-intext layout-{data.tx_tkmedia_playertype}">
+			<div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')}  ce-type-{assets.0.type} ce-cols-{data.imagecols} ce-intext layout-{data.tx_tkmedia_playertype}">
 		</f:then>
 		<f:else>
-			<div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')} ce-type-{assets.0.type} ce-cols-{gallery.count.columns} layout-{data.tx_tkmedia_playertype}">
+			<div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')} ce-type-{assets.0.type} ce-cols-{data.imagecols} layout-{data.tx_tkmedia_playertype}">
 		</f:else>
 	</f:if>
 
