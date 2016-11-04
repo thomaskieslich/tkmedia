@@ -167,15 +167,25 @@ class ImageRenderer implements FileRendererInterface
             $this->layoutKey = 'default';
         }
 
-
-        $this->defaultWidth  = $width;
-        $this->defaultHeight = $height;
-
         if (is_callable([$file, 'getOriginalFile'])) {
             /** @var FileReference $file */
             $originalFile = $file->getOriginalFile();
         } else {
             $originalFile = $file;
+        }
+
+        if ((int)$width > 0) {
+            $this->defaultWidth = $width;
+        } elseif ((int)$height > 0) {
+            $ar                 = (int)$originalFile->getProperty('width') / (int)$originalFile->getProperty('height');
+            $this->defaultWidth = (int)((int)$height * $ar);
+        }
+
+        if ((int)$height > 0) {
+            $this->defaultHeight = $height;
+        } elseif ((int)$width > 0) {
+            $ar                  = (int)$originalFile->getProperty('width') / (int)$originalFile->getProperty('height');
+            $this->defaultHeight = (int)((int)$width / $ar);
         }
 
         try {
@@ -313,12 +323,11 @@ class ImageRenderer implements FileRendererInterface
                 $localProcessingConfiguration['additionalParameters'] = '-quality ' . $image['quality'];
             }
 
-            $ar = (int)$defaultProcessConfiguration['width'] / (int)$defaultProcessConfiguration['height'];
-
             if ($originalFile->getProperty('width') < (int)$image['width']) {
                 $image['width'] = $originalWidth;
             }
 
+            $ar = (int)$defaultProcessConfiguration['width'] / (int)$defaultProcessConfiguration['height'];
             $localProcessingConfiguration['height'] = ((int)$image['width']) / $ar . 'c';
 
             if (
