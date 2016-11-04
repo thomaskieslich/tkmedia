@@ -327,6 +327,9 @@ class ImageRenderer implements FileRendererInterface
                 $image['width'] = $originalWidth;
             }
 
+            $ar = (int)$defaultProcessConfiguration['width'] / (int)$defaultProcessConfiguration['height'];
+            $localProcessingConfiguration['height'] = ((int)$image['width']) / $ar . 'c';
+
             if (
                 $configuration->getAllowUpscaling() != 1
             ) {
