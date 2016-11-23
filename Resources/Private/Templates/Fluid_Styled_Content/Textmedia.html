@@ -1,33 +1,26 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 
-<f:if condition="{splitlayout}">
-	<f:then>
-		<div id="c{data.uid}" class="<f:for each='{splitlayout}' as='layout'>layout-{layout} </f:for>">
-	</f:then>
-	<f:else>
-		<div id="c{data.uid}">
-	</f:else>
-</f:if>
+<div id="c{data.uid}">
 
-<f:if condition="{gallery.position.noWrap} != 1">
-	<f:render partial="Header" arguments="{_all}"/>
-</f:if>
+	<f:if condition="{gallery.position.noWrap} != 1">
+		<f:render partial="Header" arguments="{_all}"/>
+	</f:if>
 
-<div class="ce-textpic ce-{gallery.position.horizontal} ce-{gallery.position.vertical}{f:if(condition: gallery.position.noWrap, then: ' ce-nowrap')}">
-	<f:switch expression="{data.tx_tkmedia_playertype}">
-		<f:case value="0">
-			<f:render section="default" arguments="{_all}"/>
-		</f:case>
-		<f:case value="20">
-			<f:render section="layout-20" arguments="{_all}"/>
-		</f:case>
-		<f:case default="TRUE">
-			<f:render section="default" arguments="{_all}"/>
-		</f:case>
-	</f:switch>
-</div>
+	<div class="ce-textpic ce-{gallery.position.horizontal} ce-{gallery.position.vertical}{f:if(condition: gallery.position.noWrap, then: ' ce-nowrap')}">
+		<f:switch expression="{data.tx_tkmedia_playertype}">
+			<f:case value="0">
+				<f:render section="default" arguments="{_all}"/>
+			</f:case>
+			<f:case value="20">
+				<f:render section="layout-20" arguments="{_all}"/>
+			</f:case>
+			<f:case default="1">
+				<f:render section="default" arguments="{_all}"/>
+			</f:case>
+		</f:switch>
+	</div>
 
-<f:render partial="Footer" arguments="{_all}"/>
+	<f:render partial="Footer" arguments="{_all}"/>
 </div>
 
 <f:section name="default">
