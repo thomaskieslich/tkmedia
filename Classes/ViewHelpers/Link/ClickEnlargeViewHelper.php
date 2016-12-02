@@ -79,8 +79,11 @@ class ClickEnlargeViewHelper extends AbstractViewHelper
      * @param RenderingContextInterface $renderingContext
      * @return string
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
-    {
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ) {
         $image = $arguments['image'];
         if ($image instanceof FileInterface) {
             self::getContentObjectRenderer()->setCurrentFile($image);
@@ -112,6 +115,7 @@ class ClickEnlargeViewHelper extends AbstractViewHelper
         if ($typoScriptService === null) {
             $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
         }
+
         return $typoScriptService;
     }
 }

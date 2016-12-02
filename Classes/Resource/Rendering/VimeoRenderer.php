@@ -53,7 +53,9 @@ class VimeoRenderer implements FileRendererInterface
      */
     public function canRender(FileInterface $file)
     {
-        return ($file->getMimeType() === 'video/vimeo' || $file->getExtension() === 'vimeo') && $this->getOnlineMediaHelper($file) !== false;
+        return ($file->getMimeType() === 'video/vimeo'
+                || $file->getExtension() === 'vimeo')
+            && $this->getOnlineMediaHelper($file) !== false;
     }
 
     /**
@@ -75,6 +77,7 @@ class VimeoRenderer implements FileRendererInterface
                 $this->onlineMediaHelper = false;
             }
         }
+
         return $this->onlineMediaHelper;
     }
 
@@ -88,8 +91,13 @@ class VimeoRenderer implements FileRendererInterface
      * @param bool $usedPathsRelativeToCurrentScript See $file->getPublicUrl()
      * @return string
      */
-    public function render(FileInterface $file, $width, $height, array $options = null, $usedPathsRelativeToCurrentScript = false)
-    {
+    public function render(
+        FileInterface $file,
+        $width,
+        $height,
+        array $options = null,
+        $usedPathsRelativeToCurrentScript = false
+    ) {
         // Check for an autoplay option at the file reference itself, if not overriden yet.
         if (!isset($options['autoplay']) && $file instanceof FileReference) {
             $autoplay = $file->getProperty('autoplay');
@@ -116,7 +124,7 @@ class VimeoRenderer implements FileRendererInterface
         }
 
         $videoId = $this->getOnlineMediaHelper($file)->getOnlineMediaId($orgFile);
-        $src = sprintf('//player.vimeo.com/video/%s?%s', $videoId, implode('&amp;', $urlParams));
+//        $src = sprintf('//player.vimeo.com/video/%s?%s', $videoId, implode('&amp;', $urlParams));
 
         $attributes = ['allowfullscreen'];
         if ((int)$width > 0) {
