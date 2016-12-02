@@ -2,25 +2,25 @@
 
 <f:layout name="ContentFooter"/>
 
-<f:if condition="{gallery.position.noWrap} != 1">
-    <f:render partial="Header" arguments="{_all}"/>
-</f:if>
-
 <f:section name="content">
 
-<div class="ce-textpic ce-{gallery.position.horizontal} ce-{gallery.position.vertical}{f:if(condition: gallery.position.noWrap, then: ' ce-nowrap')}">
-    <f:switch expression="{data.tx_tkmedia_playertype}">
-        <f:case value="0">
-            <f:render section="default" arguments="{_all}"/>
-        </f:case>
-        <f:case value="20">
-            <f:render section="layout-20" arguments="{_all}"/>
-        </f:case>
-        <f:case default="1">
-            <f:render section="default" arguments="{_all}"/>
-        </f:case>
-    </f:switch>
-</div>
+    <f:if condition="{gallery.position.noWrap} != 1">
+        <f:render partial="Header" arguments="{_all}"/>
+    </f:if>
+
+    <div class="ce-textpic ce-{gallery.position.horizontal} ce-{gallery.position.vertical}{f:if(condition: gallery.position.noWrap, then: ' ce-nowrap')}">
+        <f:switch expression="{data.tx_tkmedia_playertype}">
+            <f:case value="0">
+                <f:render section="default" arguments="{_all}"/>
+            </f:case>
+            <f:case value="20">
+                <f:render section="layout-20" arguments="{_all}"/>
+            </f:case>
+            <f:case default="1">
+                <f:render section="default" arguments="{_all}"/>
+            </f:case>
+        </f:switch>
+    </div>
 
 </f:section>
 
