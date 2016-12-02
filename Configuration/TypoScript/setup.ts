@@ -11,9 +11,9 @@ page {
 }
 
 lib.fluidContent {
-  layoutRootPaths {
-    99 = EXT:tkmedia/Resources/Private/Layouts/Fluid_Styled_Content/
-  }
+#  layoutRootPaths {
+#    99 = EXT:tkmedia/Resources/Private/Layouts/Fluid_Styled_Content/
+#  }
 
   templateRootPaths {
     99 = EXT:tkmedia/Resources/Private/Templates/Fluid_Styled_Content/
