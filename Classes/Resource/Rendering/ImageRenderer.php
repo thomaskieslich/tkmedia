@@ -81,7 +81,7 @@ class ImageRenderer implements FileRendererInterface
      */
     protected function getConfiguration()
     {
-        if ( ! static::$configuration instanceof ImageRendererConfiguration) {
+        if (!static::$configuration instanceof ImageRendererConfiguration) {
             static::$configuration = GeneralUtility::makeInstance(ImageRendererConfiguration::class);
         }
 
@@ -93,7 +93,7 @@ class ImageRenderer implements FileRendererInterface
      */
     protected function getTagBuilder()
     {
-        if ( ! static::$tagBuilder instanceof TagBuilder) {
+        if (!static::$tagBuilder instanceof TagBuilder) {
             static::$tagBuilder = GeneralUtility::makeInstance(TagBuilder::class);
         }
 
@@ -177,22 +177,22 @@ class ImageRenderer implements FileRendererInterface
         if ((int)$width > 0) {
             $this->defaultWidth = $width;
         } elseif ((int)$height > 0) {
-            $ar                 = (int)$originalFile->getProperty('width') / (int)$originalFile->getProperty('height');
+            $ar = (int)$originalFile->getProperty('width') / (int)$originalFile->getProperty('height');
             $this->defaultWidth = (int)((int)$height * $ar);
         }
 
         if ((int)$height > 0) {
             $this->defaultHeight = $height;
         } elseif ((int)$width > 0) {
-            $ar                  = (int)$originalFile->getProperty('width') / (int)$originalFile->getProperty('height');
+            $ar = (int)$originalFile->getProperty('width') / (int)$originalFile->getProperty('height');
             $this->defaultHeight = (int)((int)$width / $ar);
         }
 
         try {
-            $defaultProcessConfiguration           = [];
-            $defaultProcessConfiguration['width']  = $this->defaultWidth;
+            $defaultProcessConfiguration = [];
+            $defaultProcessConfiguration['width'] = $this->defaultWidth;
             $defaultProcessConfiguration['height'] = $this->defaultHeight;
-            $defaultProcessConfiguration['crop']   = $file->getProperty('crop');
+            $defaultProcessConfiguration['crop'] = $file->getProperty('crop');
         } catch (\InvalidArgumentException $e) {
             $defaultProcessConfiguration['crop'] = '';
         }
@@ -201,8 +201,8 @@ class ImageRenderer implements FileRendererInterface
 
         if ($this->aspectratio) {
             $defaultProcessConfiguration = $this->calcCrop($defaultProcessConfiguration);
-            $this->defaultWidth          = $defaultProcessConfiguration['width'];
-            $this->defaultHeight         = $defaultProcessConfiguration['height'];
+            $this->defaultWidth = $defaultProcessConfiguration['width'];
+            $this->defaultHeight = $defaultProcessConfiguration['height'];
         }
 
         if ($this->layoutKey != 'default') {
@@ -211,7 +211,7 @@ class ImageRenderer implements FileRendererInterface
 
         $defaultSrc = $configuration->getDefaultSrc();
 
-        if ( ! $defaultSrc || empty($this->data)) {
+        if (!$defaultSrc || empty($this->data)) {
             $src = $originalFile->process(
                 ProcessedFile::CONTEXT_IMAGECROPSCALEMASK,
                 $defaultProcessConfiguration
@@ -235,7 +235,8 @@ class ImageRenderer implements FileRendererInterface
         $imageTag = $this->buildImageTag($src, $alt, $title);
 
         if ($this->layoutKey === 'data') {
-            $imageTag .= '<noscript><img src="' . $this->data['data-' . (int)$this->defaultWidth] . '" width="' . (int)$this->defaultWidth . '" alt="noscript"/></noscript>';
+            $imageTag .= '<noscript><img src="' . $this->data['data-' . (int)$this->defaultWidth] . '" width="';
+            $imageTag .= (int)$this->defaultWidth . '" alt="noscript"/></noscript>';
         }
 
         return $imageTag;
@@ -246,9 +247,9 @@ class ImageRenderer implements FileRendererInterface
      */
     protected function reset()
     {
-        $this->sizes       = [];
-        $this->srcset      = [];
-        $this->data        = [];
+        $this->sizes = [];
+        $this->srcset = [];
+        $this->data = [];
         $this->aspectratio = [];
     }
 
@@ -264,7 +265,7 @@ class ImageRenderer implements FileRendererInterface
 
         foreach ($configuration->getSourceCollection() as $sourceCollection) {
             try {
-                if ( ! is_array($sourceCollection)) {
+                if (!is_array($sourceCollection)) {
                     throw new \RuntimeException();
                 }
                 $item = [];
@@ -284,7 +285,7 @@ class ImageRenderer implements FileRendererInterface
 
                 if (isset($sourceCollection['srcset'])) {
                     $item['srcset'] = $sourceCollection['srcset'];
-                } elseif ( ! $sourceCollection['srcset']) {
+                } elseif (!$sourceCollection['srcset']) {
                     $item['srcset'] = (int)$item['width'] . 'w';
                 }
 
@@ -298,24 +299,22 @@ class ImageRenderer implements FileRendererInterface
 
                 if (isset($sourceCollection['dataKey'])) {
                     $item['dataKey'] = $sourceCollection['dataKey'];
-                } elseif ( ! $sourceCollection['dataKey']) {
+                } elseif (!$sourceCollection['dataKey']) {
                     $item['dataKey'] = (int)$item['width'];
                 }
 
                 $renderItems[$item['width']] = $item;
-
-            } catch
-            (\Exception $ignoredException) {
+            } catch (\Exception $ignoredException) {
                 continue;
             }
         }
 
 
         foreach ($renderItems as $image) {
-            $localProcessingConfiguration          = $defaultProcessConfiguration;
+            $localProcessingConfiguration = $defaultProcessConfiguration;
             $localProcessingConfiguration['width'] = $image['width'];
 
-            $originalWidth  = $originalFile->getProperty('width');
+            $originalWidth = $originalFile->getProperty('width');
             $originalHeight = $originalFile->getProperty('height');
 
 
@@ -330,11 +329,8 @@ class ImageRenderer implements FileRendererInterface
             $ar = (int)$defaultProcessConfiguration['width'] / (int)$defaultProcessConfiguration['height'];
             $localProcessingConfiguration['height'] = ((int)$image['width']) / $ar . 'c';
 
-            if (
-                $configuration->getAllowUpscaling() != 1
-            ) {
-                if (
-                    $originalWidth < (int)$localProcessingConfiguration['width']
+            if ($configuration->getAllowUpscaling() != 1) {
+                if ($originalWidth < (int)$localProcessingConfiguration['width']
                     || $originalHeight < (int)$localProcessingConfiguration['height']
                 ) {
                     continue;
@@ -363,9 +359,7 @@ class ImageRenderer implements FileRendererInterface
             if ($image['dataKey']) {
                 $this->data['data-' . $image['dataKey']] = $url;
             }
-
         }
-
     }
 
     /**
@@ -377,7 +371,7 @@ class ImageRenderer implements FileRendererInterface
      */
     protected function buildImageTag($src, $alt = '', $title = '')
     {
-        $tagBuilder    = $this->getTagBuilder();
+        $tagBuilder = $this->getTagBuilder();
         $configuration = $this->getConfiguration();
 
         $tagBuilder->reset();
@@ -388,15 +382,16 @@ class ImageRenderer implements FileRendererInterface
 
         switch ($configuration->getLayoutKey()) {
             case 'srcset':
-                if ( ! empty($this->srcset)) {
+                if (!empty($this->srcset)) {
                     $tagBuilder->addAttribute('srcset', implode(', ', $this->srcset));
                 }
-                if ( ! empty($this->sizes)) {
+                if (!empty($this->sizes)) {
                     $tagBuilder->addAttribute('sizes', implode(', ', $this->sizes));
                 } elseif (empty($this->media)) {
                     $tagBuilder->addAttribute('sizes', (int)$this->defaultWidth . 'px');
                 } else {
-                    $tagBuilder->addAttribute('sizes', implode(', ', $this->media) . ', ' . (int)$this->defaultWidth . 'px');
+                    $sizes = implode(', ', $this->media) . ', ' . (int)$this->defaultWidth . 'px';
+                    $tagBuilder->addAttribute('sizes', $sizes);
                 }
 
                 $tagBuilder->addAttributes([
@@ -410,7 +405,7 @@ class ImageRenderer implements FileRendererInterface
                     'width' => (int)$this->defaultWidth
                 ]);
                 $tagBuilder->addAttribute('data-source-width', (int)$this->defaultWidth);
-                if ( ! empty($this->data)) {
+                if (!empty($this->data)) {
                     foreach ($this->data as $key => $value) {
                         $tagBuilder->addAttribute($key, $value);
                     }
@@ -418,7 +413,7 @@ class ImageRenderer implements FileRendererInterface
                 break;
             default:
                 $tagBuilder->addAttributes([
-                    'width'  => (int)$this->defaultWidth,
+                    'width' => (int)$this->defaultWidth,
                     'height' => (int)$this->defaultHeight,
                 ]);
                 break;
@@ -439,7 +434,7 @@ class ImageRenderer implements FileRendererInterface
         $width = (int)$processingConfiguration['width'];
         $ratio = $this->aspectratio[1] / $this->aspectratio[0];
 
-        $processingConfiguration['width']  = (int)$width . 'c';
+        $processingConfiguration['width'] = (int)$width . 'c';
         $processingConfiguration['height'] = (int)$width * $ratio . 'c';
 
         return $processingConfiguration;

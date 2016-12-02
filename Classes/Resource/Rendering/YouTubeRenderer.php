@@ -54,7 +54,9 @@ class YouTubeRenderer implements FileRendererInterface
      */
     public function canRender(FileInterface $file)
     {
-        return ($file->getMimeType() === 'video/youtube' || $file->getExtension() === 'youtube') && $this->getOnlineMediaHelper($file) !== false;
+        return ($file->getMimeType() === 'video/youtube'
+                || $file->getExtension() === 'youtube')
+            && $this->getOnlineMediaHelper($file) !== false;
     }
 
     /**
@@ -100,7 +102,7 @@ class YouTubeRenderer implements FileRendererInterface
         $usedPathsRelativeToCurrentScript = false
     ) {
         // Check for an autoplay option at the file reference itself, if not overriden yet.
-        if ( ! isset($options['autoplay']) && $file instanceof FileReference) {
+        if (!isset($options['autoplay']) && $file instanceof FileReference) {
             $autoplay = $file->getProperty('autoplay');
             if ($autoplay !== null) {
                 $options['autoplay'] = $autoplay;
@@ -108,19 +110,19 @@ class YouTubeRenderer implements FileRendererInterface
         }
 
         $urlParams = array('autohide=1');
-        if ( ! isset($options['controls']) || ! empty($options['controls'])) {
+        if (!isset($options['controls']) || !empty($options['controls'])) {
             $urlParams[] = 'controls=2';
         }
-        if ( ! empty($options['autoplay'])) {
+        if (!empty($options['autoplay'])) {
             $urlParams[] = 'autoplay=1';
         }
-        if ( ! empty($options['loop'])) {
+        if (!empty($options['loop'])) {
             $urlParams[] = 'loop=1';
         }
-        if ( ! isset($options['enablejsapi']) || ! empty($options['enablejsapi'])) {
+        if (!isset($options['enablejsapi']) || !empty($options['enablejsapi'])) {
             $urlParams[] = 'enablejsapi=1&amp;origin=' . GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
         }
-        $urlParams[] = 'showinfo=' . (int) ! empty($options['showinfo']);
+        $urlParams[] = 'showinfo=' . (int)!empty($options['showinfo']);
 
         if ($file instanceof FileReference) {
             $orgFile = $file->getOriginalFile();
@@ -129,12 +131,6 @@ class YouTubeRenderer implements FileRendererInterface
         }
 
         $videoId = $this->getOnlineMediaHelper($file)->getOnlineMediaId($orgFile);
-        $src     = sprintf(
-            '//www.youtube%s.com/embed/%s?%s',
-            ! empty($options['no-cookie']) ? '-nocookie' : '',
-            $videoId,
-            implode('&amp;', $urlParams)
-        );
 
         $attributes = ['allowfullscreen'];
         if ((int)$width > 0) {
@@ -146,22 +142,21 @@ class YouTubeRenderer implements FileRendererInterface
         if (is_object($GLOBALS['TSFE']) && $GLOBALS['TSFE']->config['config']['doctype'] !== 'html5') {
             $attributes[] = 'frameborder="0"';
         }
-        foreach (
-            [
-                'class',
-                'dir',
-                'id',
-                'lang',
-                'style',
-                'title',
-                'accesskey',
-                'tabindex',
-                'onclick',
-                'poster',
-                'preload'
-            ] as $key
-        ) {
-            if ( ! empty($options[$key])) {
+        $keys = [
+            'class',
+            'dir',
+            'id',
+            'lang',
+            'style',
+            'title',
+            'accesskey',
+            'tabindex',
+            'onclick',
+            'poster',
+            'preload'
+        ];
+        foreach ($keys as $key) {
+            if (!empty($options[$key])) {
                 $attributes[] = $key . '="' . htmlspecialchars($options[$key]) . '"';
             }
         }
@@ -169,11 +164,5 @@ class YouTubeRenderer implements FileRendererInterface
         return sprintf(
             '<div data-type="youtube" data-video-id="' . $videoId . '"  data-poster="' . $options['poster'] . '"></div>'
         );
-
-//        return sprintf(
-//            '<iframe src="%s"%s></iframe>',
-//            $src,
-//            empty($attributes) ? '' : ' ' . implode(' ', $attributes)
-//        );
     }
 }
