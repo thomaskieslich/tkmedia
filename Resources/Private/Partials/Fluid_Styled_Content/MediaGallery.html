@@ -27,9 +27,9 @@
 						<f:case value="4">
 							<f:render section="videoType" arguments="{_all}"/>
 						</f:case>
-						<f:case default="1">
+						<f:defaultCase>
 							<f:render section="imageType" arguments="{_all}"/>
-						</f:case>
+						</f:defaultCase>
 					</f:switch>
 
 					<f:if condition="{column.media.description}">
@@ -109,7 +109,7 @@
 				</f:else>
 			</f:if>
 		</f:case>
-		<f:case default="1">
+		<f:defaultCase>
 			<f:if condition="{poster.0.uid}">
 				<f:then>
 					<f:render section="mediaPoster" arguments="{column: column, posterUrl: '{f:uri.image(src: poster.0.uid, treatIdAsReference: 1)}'}"/>
@@ -118,7 +118,7 @@
 					<f:render section="media" arguments="{_all}"/>
 				</f:else>
 			</f:if>
-		</f:case>
+		</f:defaultCase>
 	</f:switch>
 </f:section>
 
