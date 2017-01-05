@@ -1,5 +1,7 @@
 @import "plyr/plyr";
-
+video.plyr--setup{
+  max-width: 100% !important;
+}
 .ce-gallery {
   &.ce-type-3 {
     $progress-height: 32px;
@@ -17,9 +19,9 @@
       pointer-events: none;
     }
 
-    .plyr{
-      //width: 100% !important;
-    }
+    //.plyr--setup{
+    //  width: 100% !important;
+    //}
 
     .plyr__progress--seek,
     .plyr__progress--played,
@@ -75,6 +77,7 @@
   }
 
   &.ce-type-4 {
+
     .plyr__play-large {
       svg {
         width: 40px;
