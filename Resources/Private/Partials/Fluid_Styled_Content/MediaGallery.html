@@ -1,146 +1,146 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-			xmlns:tk="http://typo3.org/ns/ThomasK/Tkmedia/ViewHelpers"
-			data-namespace-typo3-fluid="true">
+      xmlns:tk="http://typo3.org/ns/ThomasK/Tkmedia/ViewHelpers"
+      data-namespace-typo3-fluid="true">
 
 <f:if condition="{gallery.rows}">
-	<f:if condition="{gallery.position.vertical} == 'intext' ">
-		<f:then>
-			<div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')}  ce-type-{assets.0.type} ce-cols-{data.imagecols} ce-intext layout-{data.tx_tkmedia_playertype}">
-		</f:then>
-		<f:else>
-			<div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')} ce-type-{assets.0.type} ce-cols-{data.imagecols} layout-{data.tx_tkmedia_playertype}">
-		</f:else>
-	</f:if>
+    <f:if condition="{gallery.position.vertical} == 'intext' ">
+        <f:then>
+            <div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')}  ce-type-{assets.0.type} ce-cols-{data.imagecols} ce-intext layout-{data.tx_tkmedia_playertype}">
+        </f:then>
+        <f:else>
+            <div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')} ce-type-{assets.0.type} ce-cols-{data.imagecols} layout-{data.tx_tkmedia_playertype}">
+        </f:else>
+    </f:if>
 
-	<f:for each="{gallery.rows}" as="row" iteration="rowit">
-		<f:for each="{row.columns}" as="column" iteration="colit">
+    <f:for each="{gallery.rows}" as="row" iteration="rowit">
+        <f:for each="{row.columns}" as="column" iteration="colit">
 
-			<f:if condition="{column.media}">
-				<figure>
-					<f:switch expression="{column.media.type}">
-						<f:case value="2">
-							<f:render section="imageType" arguments="{_all}"/>
-						</f:case>
-						<f:case value="3">
-							<f:render section="audioType" arguments="{_all}"/>
-						</f:case>
-						<f:case value="4">
-							<f:render section="videoType" arguments="{_all}"/>
-						</f:case>
-						<f:defaultCase>
-							<f:render section="imageType" arguments="{_all}"/>
-						</f:defaultCase>
-					</f:switch>
+            <f:if condition="{column.media}">
+                <figure>
+                    <f:switch expression="{column.media.type}">
+                        <f:case value="2">
+                            <f:render section="imageType" arguments="{_all}"/>
+                        </f:case>
+                        <f:case value="3">
+                            <f:render section="audioType" arguments="{_all}"/>
+                        </f:case>
+                        <f:case value="4">
+                            <f:render section="videoType" arguments="{_all}"/>
+                        </f:case>
+                        <f:case default="true">
+                            <f:render section="imageType" arguments="{_all}"/>
+                        </f:case>
+                    </f:switch>
 
-					<f:if condition="{column.media.description}">
-						<figcaption>
-							{column.media.description}
-						</figcaption>
-					</f:if>
-				</figure>
-			</f:if>
-		</f:for>
-	</f:for>
-	</div>
+                    <f:if condition="{column.media.description}">
+                        <figcaption>
+                            {column.media.description}
+                        </figcaption>
+                    </f:if>
+                </figure>
+            </f:if>
+        </f:for>
+    </f:for>
+    </div>
 </f:if>
 
 <f:section name="imageType">
-	<f:if condition="{column.media.link}">
-		<f:then>
-			<f:link.typolink parameter="{column.media.link}">
-				<f:render section="media" arguments="{_all}"/>
-			</f:link.typolink>
-		</f:then>
-		<f:else>
-			<f:if condition="{data.image_zoom}">
-				<f:then>
-					<tk:link.clickEnlarge image="{column.media}" configuration="{settings.media.popup}" current="{data.uid}">
-						<f:render section="media" arguments="{_all}"/>
-					</tk:link.clickEnlarge>
-				</f:then>
-				<f:else>
-					<f:render section="media" arguments="{_all}"/>
-				</f:else>
-			</f:if>
-		</f:else>
-	</f:if>
+    <f:if condition="{column.media.link}">
+        <f:then>
+            <f:link.typolink parameter="{column.media.link}">
+                <f:render section="media" arguments="{_all}"/>
+            </f:link.typolink>
+        </f:then>
+        <f:else>
+            <f:if condition="{data.image_zoom}">
+                <f:then>
+                    <tk:link.clickEnlarge image="{column.media}" configuration="{settings.media.popup}" current="{data.uid}">
+                        <f:render section="media" arguments="{_all}"/>
+                    </tk:link.clickEnlarge>
+                </f:then>
+                <f:else>
+                    <f:render section="media" arguments="{_all}"/>
+                </f:else>
+            </f:if>
+        </f:else>
+    </f:if>
 </f:section>
 
 <f:section name="audioType">
-	<f:if condition="{poster}">
-		<div class="poster">
-			<f:image image="{poster.0}" width="{gallery.width}"/>
-		</div>
-	</f:if>
-	<audio controls="controls" title="{column.media.title}">
-		<source type="{column.media.mimeType}" src="{column.media.publicUrl}" title="{column.media.title}"/>
-	</audio>
+    <f:if condition="{poster}">
+        <div class="poster">
+            <f:image image="{poster.0}" width="{gallery.width}"/>
+        </div>
+    </f:if>
+    <audio controls="controls" title="{column.media.title}">
+        <source type="{column.media.mimeType}" src="{column.media.publicUrl}" title="{column.media.title}"/>
+    </audio>
 </f:section>
 
 <f:section name="videoType">
-	<f:switch expression="{colit.index}">
-		<f:case value="1">
-			<f:if condition="{poster.1.uid}">
-				<f:then>
-					<f:render section="mediaPoster" arguments="{column: column, posterUrl: '{f:uri.image(src: poster.1.uid, treatIdAsReference: 1)}'}"/>
-				</f:then>
-				<f:else>
-					<f:render section="media" arguments="{_all}"/>
-				</f:else>
-			</f:if>
-		</f:case>
-		<f:case value="2">
-			<f:if condition="{poster.2.uid}">
-				<f:then>
-					<f:render section="mediaPoster" arguments="{column: column, posterUrl: '{f:uri.image(src: poster.2.uid, treatIdAsReference: 1)}'}"/>
-				</f:then>
-				<f:else>
-					<f:render section="media" arguments="{_all}"/>
-				</f:else>
-			</f:if>
-		</f:case>
-		<f:case value="3">
-			<f:if condition="{poster.3.uid}">
-				<f:then>
-					<f:render section="mediaPoster" arguments="{column: column, posterUrl: '{f:uri.image(src: poster.3.uid, treatIdAsReference: 1)}'}"/>
-				</f:then>
-				<f:else>
-					<f:render section="media" arguments="{_all}"/>
-				</f:else>
-			</f:if>
-		</f:case>
-		<f:defaultCase>
-			<f:if condition="{poster.0.uid}">
-				<f:then>
-					<f:render section="mediaPoster" arguments="{column: column, posterUrl: '{f:uri.image(src: poster.0.uid, treatIdAsReference: 1)}'}"/>
-				</f:then>
-				<f:else>
-					<f:render section="media" arguments="{_all}"/>
-				</f:else>
-			</f:if>
-		</f:defaultCase>
-	</f:switch>
+    <f:switch expression="{colit.index}">
+        <f:case value="1">
+            <f:if condition="{poster.1.uid}">
+                <f:then>
+                    <f:render section="mediaPoster" arguments="{column: column, posterUrl: '{f:uri.image(src: poster.1.uid, treatIdAsReference: 1)}'}"/>
+                </f:then>
+                <f:else>
+                    <f:render section="media" arguments="{_all}"/>
+                </f:else>
+            </f:if>
+        </f:case>
+        <f:case value="2">
+            <f:if condition="{poster.2.uid}">
+                <f:then>
+                    <f:render section="mediaPoster" arguments="{column: column, posterUrl: '{f:uri.image(src: poster.2.uid, treatIdAsReference: 1)}'}"/>
+                </f:then>
+                <f:else>
+                    <f:render section="media" arguments="{_all}"/>
+                </f:else>
+            </f:if>
+        </f:case>
+        <f:case value="3">
+            <f:if condition="{poster.3.uid}">
+                <f:then>
+                    <f:render section="mediaPoster" arguments="{column: column, posterUrl: '{f:uri.image(src: poster.3.uid, treatIdAsReference: 1)}'}"/>
+                </f:then>
+                <f:else>
+                    <f:render section="media" arguments="{_all}"/>
+                </f:else>
+            </f:if>
+        </f:case>
+        <f:case default="true">
+            <f:if condition="{poster.0.uid}">
+                <f:then>
+                    <f:render section="mediaPoster" arguments="{column: column, posterUrl: '{f:uri.image(src: poster.0.uid, treatIdAsReference: 1)}'}"/>
+                </f:then>
+                <f:else>
+                    <f:render section="media" arguments="{_all}"/>
+                </f:else>
+            </f:if>
+        </f:case>
+    </f:switch>
 </f:section>
 
 <f:section name="media">
-	<f:media
-		file="{column.media}"
-		width="{column.dimensions.width}"
-		height="{column.dimensions.height}"
-		alt="{column.media.alternative}"
-		title="{column.media.title}"
-	/>
+    <f:media
+            file="{column.media}"
+            width="{column.dimensions.width}"
+            height="{column.dimensions.height}"
+            alt="{column.media.alternative}"
+            title="{column.media.title}"
+    />
 </f:section>
 
 <f:section name="mediaPoster">
-	<f:media
-		file="{column.media}"
-		width="{column.dimensions.width}"
-		height="{column.dimensions.height}"
-		alt="{column.media.alternative}"
-		title="{column.media.title}"
-		additionalConfig="{poster: '{posterUrl}'}"
-	/>
+    <f:media
+            file="{column.media}"
+            width="{column.dimensions.width}"
+            height="{column.dimensions.height}"
+            alt="{column.media.alternative}"
+            title="{column.media.title}"
+            additionalConfig="{poster: '{posterUrl}'}"
+    />
 </f:section>
 
 </html>

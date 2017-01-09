@@ -1,4 +1,5 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
 
 <f:layout name="ContentFooter"/>
 
@@ -16,9 +17,9 @@
             <f:case value="20">
                 <f:render section="layout-20" arguments="{_all}"/>
             </f:case>
-            <f:defaultCase>
+            <f:case default="true">
                 <f:render section="default" arguments="{_all}"/>
-            </f:defaultCase>
+            </f:case>
         </f:switch>
     </div>
 
