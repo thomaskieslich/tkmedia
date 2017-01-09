@@ -26,8 +26,8 @@ var fs = require("fs"),
 	through = require("through2");
 
 var paths = {
-		private: 'tkmedia/Resources/Private/',
-		public: 'tkmedia/Resources/Public/'
+		private: '../Resources/Private/',
+		public: '../Resources/Public/'
 	};
 
 gulp.task('sass', function () {
