@@ -1,6 +1,6 @@
 {
-	"name": "tkplayer",
-	"dependencies": {
-		"plyr": "latest"
-	}
+  "name": "tkplayer",
+  "dependencies": {
+    "plyr": "latest"
+  }
 }

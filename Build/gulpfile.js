@@ -1,29 +1,9 @@
-// ==========================================================================
-// Gulp build script
-// ==========================================================================
-/*global require, __dirname,Buffer*/
-/*jshint -W079 */
-
-var fs = require("fs"),
-    path = require("path"),
-    gulp = require("gulp"),
-    gutil = require("gulp-util"),
-    concat = require("gulp-concat"),
-    uglify = require("gulp-uglify"),
-    less = require("gulp-less"),
+var gulp = require("gulp"),
     sass = require("gulp-sass"),
     cleanCSS = require("gulp-clean-css"),
-    run = require("run-sequence"),
+    gutil = require("gulp-util"),
     autoprefixer = require("gulp-autoprefixer"),
-    svgstore = require("gulp-svgstore"),
-    svgmin = require("gulp-svgmin"),
-    rename = require("gulp-rename"),
-    s3 = require("gulp-s3"),
-    replace = require("gulp-replace"),
-    open = require("gulp-open"),
-    size = require("gulp-size"),
-    sourcemaps = require('gulp-sourcemaps'),
-    through = require("through2");
+    sourcemaps = require('gulp-sourcemaps');
 
 var paths = {
     private: '../Resources/Private/',
