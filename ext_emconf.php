@@ -8,7 +8,7 @@ $EM_CONF[$_EXTKEY] = array(
     'version'      => '7.6.0',
     'constraints'  => array(
         'depends'   => array(
-            'typo3' => '7.6.11-8.9.99'
+            'typo3' => '7.6.11-7.6.99'
         ),
         'conflicts' => array(
             'css_styled_content' => ''
