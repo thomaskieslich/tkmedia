@@ -1,0 +1,28 @@
+{
+  "repositories": [
+      {
+        "type": "vcs",
+        "url": "https://github.com/thomaskieslich/tkmedia"
+      }
+    ],
+  "name": "thomask/tkmedia",
+  "type": "typo3-cms-extension",
+  "minimum-stability": "dev",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "Thomas Kieslich",
+      "role": "Developer",
+      "homepage": "https://thomaskieslich.de/"
+    }
+  ],
+  "version": "7.6.0",
+  "require": {
+    "typo3/cms-core": ">=7.6.0 <8.6.99"
+  },
+  "autoload": {
+    "psr-4": {
+      "ThomasK\\Tkmedia\\": "Classes"
+    }
+  }
+}

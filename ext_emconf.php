@@ -17,4 +17,11 @@ $EM_CONF[$_EXTKEY] = array(
             'fluid_styled_content' => ''
         ),
     ),
+    'autoload' =>
+        array(
+            'psr-4' =>
+                array(
+                    "ThomasK\\Tkmedia\\" => "Classes"
+                )
+        )
 );
