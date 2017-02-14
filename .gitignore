@@ -25,3 +25,4 @@ Build/node_modules/*
 # Ignore composer stuff
 bin/*
 vendor/*
+/.Build/
