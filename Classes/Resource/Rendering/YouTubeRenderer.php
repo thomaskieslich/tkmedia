@@ -1,4 +1,5 @@
 <?php
+
 namespace ThomasK\Tkmedia\Resource\Rendering;
 
 /*
@@ -49,21 +50,17 @@ class YouTubeRenderer implements FileRendererInterface
      * Check if given File(Reference) can be rendered
      *
      * @param FileInterface $file File of FileReference to render
-     *
      * @return bool
      */
     public function canRender(FileInterface $file)
     {
-        return ($file->getMimeType() === 'video/youtube'
-                || $file->getExtension() === 'youtube')
-            && $this->getOnlineMediaHelper($file) !== false;
+        return ($file->getMimeType() === 'video/youtube' || $file->getExtension() === 'youtube') && $this->getOnlineMediaHelper($file) !== false;
     }
 
     /**
      * Get online media helper
      *
      * @param FileInterface $file
-     *
      * @return bool|OnlineMediaHelperInterface
      */
     protected function getOnlineMediaHelper(FileInterface $file)
@@ -79,7 +76,6 @@ class YouTubeRenderer implements FileRendererInterface
                 $this->onlineMediaHelper = false;
             }
         }
-
         return $this->onlineMediaHelper;
     }
 
@@ -91,7 +87,6 @@ class YouTubeRenderer implements FileRendererInterface
      * @param int|string $height TYPO3 known format; examples: 220, 200m or 200c
      * @param array $options
      * @param bool $usedPathsRelativeToCurrentScript See $file->getPublicUrl()
-     *
      * @return string
      */
     public function render(
@@ -101,28 +96,13 @@ class YouTubeRenderer implements FileRendererInterface
         array $options = null,
         $usedPathsRelativeToCurrentScript = false
     ) {
-        // Check for an autoplay option at the file reference itself, if not overriden yet.
+        // Check for an autoplay option at the file reference itself, if not overridden yet.
         if (!isset($options['autoplay']) && $file instanceof FileReference) {
             $autoplay = $file->getProperty('autoplay');
             if ($autoplay !== null) {
                 $options['autoplay'] = $autoplay;
             }
         }
-
-        $urlParams = array('autohide=1');
-        if (!isset($options['controls']) || !empty($options['controls'])) {
-            $urlParams[] = 'controls=2';
-        }
-        if (!empty($options['autoplay'])) {
-            $urlParams[] = 'autoplay=1';
-        }
-        if (!empty($options['loop'])) {
-            $urlParams[] = 'loop=1';
-        }
-        if (!isset($options['enablejsapi']) || !empty($options['enablejsapi'])) {
-            $urlParams[] = 'enablejsapi=1&amp;origin=' . GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
-        }
-        $urlParams[] = 'showinfo=' . (int)!empty($options['showinfo']);
 
         if ($file instanceof FileReference) {
             $orgFile = $file->getOriginalFile();
@@ -131,6 +111,31 @@ class YouTubeRenderer implements FileRendererInterface
         }
 
         $videoId = $this->getOnlineMediaHelper($file)->getOnlineMediaId($orgFile);
+
+        $urlParams = ['autohide=1'];
+        if (!isset($options['controls']) || !empty($options['controls'])) {
+            $urlParams[] = 'controls=2';
+        }
+        if (!empty($options['autoplay'])) {
+            $urlParams[] = 'autoplay=1';
+        }
+        if (!empty($options['loop'])) {
+            $urlParams[] = 'loop=1&amp;playlist=' . $videoId;
+        }
+        if (isset($options['relatedVideos'])) {
+            $urlParams[] = 'rel=' . (int)(bool)$options['relatedVideos'];
+        }
+        if (!isset($options['enablejsapi']) || !empty($options['enablejsapi'])) {
+            $urlParams[] = 'enablejsapi=1&amp;origin=' . rawurlencode(GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST'));
+        }
+        $urlParams[] = 'showinfo=' . (int)!empty($options['showinfo']);
+
+        $src = sprintf(
+            'https://www.youtube%s.com/embed/%s?%s',
+            !empty($options['no-cookie']) ? '-nocookie' : '',
+            $videoId,
+            implode('&amp;', $urlParams)
+        );
 
         $attributes = ['allowfullscreen'];
         if ((int)$width > 0) {
@@ -142,27 +147,31 @@ class YouTubeRenderer implements FileRendererInterface
         if (is_object($GLOBALS['TSFE']) && $GLOBALS['TSFE']->config['config']['doctype'] !== 'html5') {
             $attributes[] = 'frameborder="0"';
         }
-        $keys = [
-            'class',
-            'dir',
-            'id',
-            'lang',
-            'style',
-            'title',
-            'accesskey',
-            'tabindex',
-            'onclick',
-            'poster',
-            'preload'
-        ];
-        foreach ($keys as $key) {
+        foreach ([
+                     'class',
+                     'dir',
+                     'id',
+                     'lang',
+                     'style',
+                     'title',
+                     'accesskey',
+                     'tabindex',
+                     'onclick',
+                     'poster',
+                     'preload'
+                 ] as $key) {
             if (!empty($options[$key])) {
                 $attributes[] = $key . '="' . htmlspecialchars($options[$key]) . '"';
             }
         }
 
-        return sprintf(
-            '<div data-type="youtube" data-video-id="' . $videoId . '"  data-poster="' . $options['poster'] . '"></div>'
-        );
+        $plyr = '<div data-type="youtube" data-video-id="' . $videoId . '"></div>';
+        return $plyr;
+
+//        return sprintf(
+//            '<iframe src="%s"%s></iframe>',
+//            $src,
+//            empty($attributes) ? '' : ' ' . implode(' ', $attributes)
+//        );
     }
 }

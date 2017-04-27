@@ -14,6 +14,7 @@ namespace ThomasK\Tkmedia\DataProcessing;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
@@ -90,7 +91,6 @@ use TYPO3\CMS\Frontend\ContentObject\Exception\ContentRenderingException;
  *     padding = 0
  *   }
  * }
- *
  */
 class GalleryProcessor implements DataProcessorInterface
 {
@@ -203,6 +203,11 @@ class GalleryProcessor implements DataProcessorInterface
     protected $borderPadding;
 
     /**
+     * @var string
+     */
+    protected $cropVariant = 'default';
+
+    /**
      * The (filtered) media files to be used in the gallery
      *
      * @var FileInterface[]
@@ -261,6 +266,7 @@ class GalleryProcessor implements DataProcessorInterface
         $this->borderEnabled = (bool)$this->getConfigurationValue('borderEnabled', 'imageborder');
         $this->borderWidth = (int)$this->getConfigurationValue('borderWidth');
         $this->borderPadding = (int)$this->getConfigurationValue('borderPadding');
+        $this->cropVariant = (int)$this->getConfigurationValue('cropVariant') ?: 'default';
 
         $this->determineGalleryPosition();
         $this->determineMaximumGalleryWidth();
@@ -307,8 +313,6 @@ class GalleryProcessor implements DataProcessorInterface
      *
      * Gallery has a horizontal and a vertical position towards the text
      * and a possible wrapping of the text around the gallery.
-     *
-     * @return void
      */
     protected function determineGalleryPosition()
     {
@@ -327,8 +331,6 @@ class GalleryProcessor implements DataProcessorInterface
 
     /**
      * Get the gallery width based on vertical position
-     *
-     * @return void
      */
     protected function determineMaximumGalleryWidth()
     {
@@ -341,8 +343,6 @@ class GalleryProcessor implements DataProcessorInterface
 
     /**
      * Calculate the amount of rows and columns
-     *
-     * @return void
      */
     protected function calculateRowsAndColumns()
     {
@@ -373,8 +373,6 @@ class GalleryProcessor implements DataProcessorInterface
      * the use of a border, defined by user, where the border width and padding are taken into account
      *
      * File objects MUST already be filtered. They need a height and width to be shown in the gallery
-     *
-     * @return void
      */
     protected function calculateMediaWidthsAndHeights()
     {
@@ -424,7 +422,7 @@ class GalleryProcessor implements DataProcessorInterface
             // Recalculate gallery width
             $this->galleryData['width'] = floor($maximumRowWidth / $mediaScalingCorrection);
 
-        // User entered a predefined width
+            // User entered a predefined width
         } elseif ($this->equalMediaWidth) {
             $mediaScalingCorrection = 1;
 
@@ -448,18 +446,11 @@ class GalleryProcessor implements DataProcessorInterface
             // Recalculate gallery width
             $this->galleryData['width'] = floor($totalRowWidth / $mediaScalingCorrection);
 
-        // Automatic setting of width and height
+            // Automatic setting of width and height
         } else {
             $maxMediaWidth = (int)($galleryWidthMinusBorderAndSpacing / $this->galleryData['count']['columns']);
-
             foreach ($this->fileObjects as $key => $fileObject) {
-                /**TODO*/
                 $mediaWidth = min($maxMediaWidth, $this->getCroppedDimensionalProperty($fileObject, 'width'));
-
-                if($fileObject->getType() == 3 || $fileObject->getType() == 4){
-                    $mediaWidth = $maxMediaWidth;
-                }
-
                 $mediaHeight = floor(
                     $this->getCroppedDimensionalProperty($fileObject, 'height') * ($mediaWidth / max($this->getCroppedDimensionalProperty($fileObject, 'width'), 1))
                 );
@@ -477,6 +468,7 @@ class GalleryProcessor implements DataProcessorInterface
      *
      * @param FileInterface $fileObject
      * @param string $dimensionalProperty 'width' or 'height'
+     *
      * @return int
      */
     protected function getCroppedDimensionalProperty(FileInterface $fileObject, $dimensionalProperty)
@@ -484,16 +476,16 @@ class GalleryProcessor implements DataProcessorInterface
         if (!$fileObject->hasProperty('crop') || empty($fileObject->getProperty('crop'))) {
             return $fileObject->getProperty($dimensionalProperty);
         }
-        $croppingConfiguration = json_decode($fileObject->getProperty('crop'), true);
-        return (int)$croppingConfiguration[$dimensionalProperty];
+
+        $croppingConfiguration = $fileObject->getProperty('crop');
+        $cropVariantCollection = CropVariantCollection::create((string)$croppingConfiguration);
+        return (int) $cropVariantCollection->getCropArea($this->cropVariant)->makeAbsoluteBasedOnFile($fileObject)->asArray()[$dimensionalProperty];
     }
 
     /**
      * Prepare the gallery data
      *
      * Make an array for rows, columns and configuration
-     *
-     * @return void
      */
     protected function prepareGalleryData()
     {

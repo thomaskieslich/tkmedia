@@ -18,9 +18,9 @@ use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\TypoScriptService;
-use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
 /**
  * A view helper for creating a link for an image popup.
@@ -44,8 +44,6 @@ class ClickEnlargeViewHelper extends AbstractViewHelper
 
     /**
      * Initialize ViewHelper arguments
-     *
-     * @return void
      */
     public function initializeArguments()
     {
@@ -79,11 +77,8 @@ class ClickEnlargeViewHelper extends AbstractViewHelper
      * @param RenderingContextInterface $renderingContext
      * @return string
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ) {
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
+    {
         $image = $arguments['image'];
         if ($image instanceof FileInterface) {
             self::getContentObjectRenderer()->setCurrentFile($image);
@@ -115,7 +110,6 @@ class ClickEnlargeViewHelper extends AbstractViewHelper
         if ($typoScriptService === null) {
             $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
         }
-
         return $typoScriptService;
     }
 }

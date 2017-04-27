@@ -14,7 +14,6 @@ namespace ThomasK\Tkmedia\Resource\Rendering;
  * The TYPO3 project - inspiring people to share!
  */
 
-
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\Rendering\FileRendererInterface;
@@ -29,7 +28,7 @@ class VideoTagRenderer implements FileRendererInterface
      *
      * @var array
      */
-    protected $possibleMimeTypes = array('video/mp4', 'video/webm', 'video/ogg', 'application/ogg');
+    protected $possibleMimeTypes = ['video/mp4', 'video/webm', 'video/ogg', 'application/ogg'];
 
     /**
      * Returns the priority of the renderer
@@ -66,13 +65,8 @@ class VideoTagRenderer implements FileRendererInterface
      * @param bool $usedPathsRelativeToCurrentScript See $file->getPublicUrl()
      * @return string
      */
-    public function render(
-        FileInterface $file,
-        $width,
-        $height,
-        array $options = array(),
-        $usedPathsRelativeToCurrentScript = false
-    ) {
+    public function render(FileInterface $file, $width, $height, array $options = [], $usedPathsRelativeToCurrentScript = false)
+    {
 
         // If autoplay isn't set manually check if $file is a FileReference take autoplay from there
         if (!isset($options['autoplay']) && $file instanceof FileReference) {
@@ -83,12 +77,12 @@ class VideoTagRenderer implements FileRendererInterface
         }
 
         $attributes = [];
-//        if ((int)$width > 0) {
-//            $attributes[] = 'width="' . (int)$width . '"';
-//        }
-//        if ((int)$height > 0) {
-//            $attributes[] = 'height="' . (int)$height . '"';
-//        }
+        if ((int)$width > 0) {
+            $attributes[] = 'width="' . (int)$width . '"';
+        }
+        if ((int)$height > 0) {
+            $attributes[] = 'height="' . (int)$height . '"';
+        }
         if (!isset($options['controls']) || !empty($options['controls'])) {
             $attributes[] = 'controls';
         }
@@ -101,10 +95,6 @@ class VideoTagRenderer implements FileRendererInterface
         if (!empty($options['loop'])) {
             $attributes[] = 'loop';
         }
-        if (!empty($options['poster'])) {
-            $attributes[] = 'poster="' . $options['poster'] . '"';
-        }
-
         foreach (['class', 'dir', 'id', 'lang', 'style', 'title', 'accesskey', 'tabindex', 'onclick'] as $key) {
             if (!empty($options[$key])) {
                 $attributes[] = $key . '="' . htmlspecialchars($options[$key]) . '"';

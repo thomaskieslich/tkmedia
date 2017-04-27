@@ -1,8 +1,5 @@
-# cat=basic; type=boolean; label=enable Aspect Ratios
-enableAr = 1
+# cat=basic; type=string; label=Aspect Ratios: Values like: 1:1,4:3,3:2,16:9
+aspectratio = 1:1,3:2,4:3,16:9
 
-# cat=basic; type=string; label=Aspect Ratios: Values like: 1:1,4:3...
-aspectratio = 1:1,4:3,13:9,16:9
-
-# cat=basic; type=boolean; label=enable Player Types
-enablePlayer = 1
+# cat=basic; type=string; label=allowed Extensions for Cropping
+allowedExtensions = gif,jpg,jpeg,tif,png

@@ -1,4 +1,5 @@
 <?php
+
 namespace ThomasK\Tkmedia\Resource\Rendering;
 
 /*
@@ -53,9 +54,7 @@ class VimeoRenderer implements FileRendererInterface
      */
     public function canRender(FileInterface $file)
     {
-        return ($file->getMimeType() === 'video/vimeo'
-                || $file->getExtension() === 'vimeo')
-            && $this->getOnlineMediaHelper($file) !== false;
+        return ($file->getMimeType() === 'video/vimeo' || $file->getExtension() === 'vimeo') && $this->getOnlineMediaHelper($file) !== false;
     }
 
     /**
@@ -77,7 +76,6 @@ class VimeoRenderer implements FileRendererInterface
                 $this->onlineMediaHelper = false;
             }
         }
-
         return $this->onlineMediaHelper;
     }
 
@@ -98,7 +96,7 @@ class VimeoRenderer implements FileRendererInterface
         array $options = null,
         $usedPathsRelativeToCurrentScript = false
     ) {
-        // Check for an autoplay option at the file reference itself, if not overriden yet.
+        // Check for an autoplay option at the file reference itself, if not overridden yet.
         if (!isset($options['autoplay']) && $file instanceof FileReference) {
             $autoplay = $file->getProperty('autoplay');
             if ($autoplay !== null) {
@@ -106,7 +104,7 @@ class VimeoRenderer implements FileRendererInterface
             }
         }
 
-        $urlParams = array();
+        $urlParams = [];
         if (!empty($options['autoplay'])) {
             $urlParams[] = 'autoplay=1';
         }
@@ -124,7 +122,7 @@ class VimeoRenderer implements FileRendererInterface
         }
 
         $videoId = $this->getOnlineMediaHelper($file)->getOnlineMediaId($orgFile);
-//        $src = sprintf('//player.vimeo.com/video/%s?%s', $videoId, implode('&amp;', $urlParams));
+        $src = sprintf('https://player.vimeo.com/video/%s?%s', $videoId, implode('&amp;', $urlParams));
 
         $attributes = ['allowfullscreen'];
         if ((int)$width > 0) {
@@ -142,9 +140,8 @@ class VimeoRenderer implements FileRendererInterface
             }
         }
 
-        return sprintf(
-            '<div data-type="vimeo" data-video-id="' . $videoId . '"  data-poster="' . $options['poster'] . '"></div>'
-        );
+        $vimeo = '<div data-type="vimeo" data-video-id="' . $videoId . '"></div>';
+        return $vimeo;
 
 //        return sprintf(
 //            '<iframe src="%s"%s></iframe>',

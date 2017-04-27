@@ -26,3 +26,4 @@ Build/node_modules/*
 bin/*
 vendor/*
 /.Build/
+/.editorconfig

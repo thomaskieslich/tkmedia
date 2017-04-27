@@ -1,0 +1,16 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:f="http://typo3.org/ns/ThomasK/Tkmedia/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:variable name="retina"><f:cObject typoscriptObjectPath="lib.math" data="{dimensions.width}*2" /></f:variable>
+
+<img sizes="(min-width: 40em) {dimensions.width}px, 100vw"
+     srcset="{f:uri.image(image: file, width: dimensions.width, ratio: ratio)} {dimensions.width}w,
+             {f:uri.image(image: file, width: retina, ratio: ratio)} {retina}w,
+             {f:uri.image(image: file, width: settings.image.small, ratio: ratio)} {settings.image.small}w,
+             {f:uri.image(image: file, width: settings.image.medium, ratio: ratio)} {settings.image.medium}w,
+             {f:uri.image(image: file, width: settings.image.large, ratio: ratio)} {settings.image.large}w"
+     src="{f:uri.image(image: file, width: dimensions.width, ratio: ratio)}" alt="{file.alternative}" title="{file.title}">
+
+
+</html>

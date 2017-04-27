@@ -1,20 +1,14 @@
 <?php
 $EM_CONF[$_EXTKEY] = array(
-    'title' => 'Extend Textmedia',
+    'title' => 'Extend Textmedia Element',
     'category' => 'fe',
     'state' => 'stable',
     'author' => 'ThomasK',
     'author_email' => 'post@thomaskieslich.de',
-    'version' => '8.5.0',
+    'version' => '8.7.0',
     'constraints' => array(
         'depends' => array(
-            'typo3' => '8.5.1-8.7.99'
-        ),
-        'conflicts' => array(
-            'css_styled_content' => ''
-        ),
-        'suggests' => array(
-            'fluid_styled_content' => ''
+            'typo3' => '8.7.0-8.7.99'
         ),
     )
 );
