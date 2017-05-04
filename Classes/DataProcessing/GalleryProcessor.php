@@ -454,6 +454,15 @@ class GalleryProcessor implements DataProcessorInterface
                 $mediaHeight = floor(
                     $this->getCroppedDimensionalProperty($fileObject, 'height') * ($mediaWidth / max($this->getCroppedDimensionalProperty($fileObject, 'width'), 1))
                 );
+
+                if (
+                    !$mediaWidth
+                    || $fileObject->getMimeType() == 'video/youtube'
+                    ||$fileObject->getMimeType() == 'video/youtube'
+                ) {
+                    $mediaWidth = $maxMediaWidth;
+                }
+
                 $this->mediaDimensions[$key] = [
                     'width' => $mediaWidth,
                     'height' => $mediaHeight

@@ -2,29 +2,22 @@
 			data-namespace-typo3-fluid="true">
 
 <f:if condition="{gallery.rows}">
-	<f:variable name="gallery-cols">
-		<f:cObject typoscriptObjectPath="lib.math" data="12/{gallery.count.columns}"/>
+	<f:variable name="medium-grid-cols">
+		medium-<f:cObject typoscriptObjectPath="lib.math" data="12/{data.imagecols}"/>
 	</f:variable>
-	<div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')}" data-ce-columns="{gallery.count.columns}" data-ce-images="{gallery.count.files}">
-		<f:if condition="{gallery.position.horizontal} == 'center'">
-			<div class="ce-outer">
-				<div class="ce-inner">
-		</f:if>
+
+	<div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')}">
 		<f:for each="{gallery.rows}" as="row">
 			<div class="ce-row">
 				<f:for each="{row.columns}" as="column">
 					<f:if condition="{column.media}">
-						<div class="ce-column medium-{gallery-cols}">
+						<div class="ce-column column {medium-grid-cols}">
 							<f:render partial="Media/Type" arguments="{file: column.media, dimensions: column.dimensions, data: data, settings: settings}"/>
 						</div>
 					</f:if>
 				</f:for>
 			</div>
 		</f:for>
-		<f:if condition="{gallery.position.horizontal} == 'center'">
 	</div>
-	</div>
-</f:if>
-</div>
 </f:if>
 </html>

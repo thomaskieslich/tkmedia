@@ -3,7 +3,6 @@ if (!defined('TYPO3_MODE')) {
     die ('Access denied.');
 }
 
-// We only want to have file relations if extension File advanced metadata is loaded.
 if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('filemetadata')) {
     $configuration = '--div--;Cover, media_cover';
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('sys_file_metadata', $configuration);
@@ -16,10 +15,18 @@ $tca = [
             'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
                 'media_cover',
                 [
-                    'minitems' => 0,
                     'maxitems' => 1,
+                    'overrideChildTca' => [
+                        'types' => [
+                            \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
+                                'showitem' => '
+                                title,crop,
+                                --palette--;;filePalette'
+                            ],
+                        ],
+                    ],
                 ],
-                'jpg,jpeg'
+                'jpg,jpeg,png'
             ),
         ],
     ],

@@ -1,4 +1,5 @@
 <?php
+
 namespace ThomasK\Tkmedia\Resource\Rendering;
 
 /*
@@ -14,9 +15,12 @@ namespace ThomasK\Tkmedia\Resource\Rendering;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
+use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Resource\Rendering\FileRendererInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class VideoTagRenderer
@@ -65,8 +69,13 @@ class VideoTagRenderer implements FileRendererInterface
      * @param bool $usedPathsRelativeToCurrentScript See $file->getPublicUrl()
      * @return string
      */
-    public function render(FileInterface $file, $width, $height, array $options = [], $usedPathsRelativeToCurrentScript = false)
-    {
+    public function render(
+        FileInterface $file,
+        $width,
+        $height,
+        array $options = [],
+        $usedPathsRelativeToCurrentScript = false
+    ) {
 
         // If autoplay isn't set manually check if $file is a FileReference take autoplay from there
         if (!isset($options['autoplay']) && $file instanceof FileReference) {
@@ -101,11 +110,55 @@ class VideoTagRenderer implements FileRendererInterface
             }
         }
 
+        //Cover
+        /** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
+        $fileRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Resource\FileRepository::class);
+        $fileMetaData = $file->getOriginalFile()->_getMetaData();
+        /** @var \TYPO3\CMS\Core\Resource\FileReference $fileObjects */
+        $fileObjects = $fileRepository->findByRelation('sys_file_metadata', 'media_cover', $fileMetaData['uid']);
+        /** @var \TYPO3\CMS\Core\Resource\File $cover */
+        $cover = $fileObjects[0];
+
+        if (!empty($cover)) {
+            try {
+                $defaultProcessConfiguration = [];
+                $defaultProcessConfiguration['width'] = (int)$width;
+                $defaultProcessConfiguration['height'] = (int)$height;
+                $defaultProcessConfiguration['crop'] = $this->getCropArea($cover, 'default');
+            } catch (\InvalidArgumentException $e) {
+                $defaultProcessConfiguration['crop'] = '';
+            }
+
+            $cover = $cover->getOriginalFile();
+            $coverProcessed = $cover->process(
+                ProcessedFile::CONTEXT_IMAGECROPSCALEMASK,
+                $defaultProcessConfiguration
+            );
+
+//            DebuggerUtility::var_dump($cover);
+
+            $attributes[] = 'poster=' . $coverProcessed->getPublicUrl();
+        }
+
         return sprintf(
             '<video%s><source src="%s" type="%s"></video>',
             empty($attributes) ? '' : ' ' . implode(' ', $attributes),
             htmlspecialchars($file->getPublicUrl($usedPathsRelativeToCurrentScript)),
             $file->getMimeType()
         );
+    }
+
+        /**
+     * @param FileReference $fileReference
+     * @param string $cropVariant
+     * @return null|\TYPO3\CMS\Core\Imaging\ImageManipulation\Area
+     */
+    protected function getCropArea(FileReference $fileReference, string $cropVariant)
+    {
+        $cropVariantCollection = CropVariantCollection::create(
+            (string)$fileReference->getProperty('crop')
+        );
+        $cropArea = $cropVariantCollection->getCropArea($cropVariant);
+        return $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($fileReference);
     }
 }
