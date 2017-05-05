@@ -8,5 +8,6 @@ $rendererRegistry = \TYPO3\CMS\Core\Resource\Rendering\RendererRegistry::getInst
 $rendererRegistry->registerRendererClass(\ThomasK\Tkmedia\Resource\Rendering\YouTubeRenderer::class);
 $rendererRegistry->registerRendererClass(\ThomasK\Tkmedia\Resource\Rendering\VimeoRenderer::class);
 $rendererRegistry->registerRendererClass(\ThomasK\Tkmedia\Resource\Rendering\VideoTagRenderer::class);
+$rendererRegistry->registerRendererClass(\ThomasK\Tkmedia\Resource\Rendering\AudioTagRenderer::class);
 
 unset($rendererRegistry);

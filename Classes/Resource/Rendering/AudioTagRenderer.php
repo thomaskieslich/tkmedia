@@ -23,16 +23,16 @@ use TYPO3\CMS\Core\Resource\Rendering\FileRendererInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Class VideoTagRenderer
+ * Class AudioTagRenderer
  */
-class VideoTagRenderer implements FileRendererInterface
+class AudioTagRenderer implements FileRendererInterface
 {
     /**
      * Mime types that can be used in the HTML Video tag
      *
      * @var array
      */
-    protected $possibleMimeTypes = ['video/mp4', 'video/webm', 'video/ogg', 'application/ogg'];
+    protected $possibleMimeTypes = ['audio/mpeg', 'audio/wav', 'audio/ogg'];
 
     /**
      * Returns the priority of the renderer
@@ -85,28 +85,33 @@ class VideoTagRenderer implements FileRendererInterface
             }
         }
 
-        $attributes = [];
-        if ((int)$width > 0) {
-            $attributes[] = 'width="' . (int)$width . '"';
-        }
-        if ((int)$height > 0) {
-            $attributes[] = 'height="' . (int)$height . '"';
-        }
+        $additionalAttributes = [];
         if (!isset($options['controls']) || !empty($options['controls'])) {
-            $attributes[] = 'controls';
+            $additionalAttributes[] = 'controls';
         }
         if (!empty($options['autoplay'])) {
-            $attributes[] = 'autoplay';
+            $additionalAttributes[] = 'autoplay';
         }
         if (!empty($options['muted'])) {
-            $attributes[] = 'muted';
+            $additionalAttributes[] = 'muted';
         }
         if (!empty($options['loop'])) {
-            $attributes[] = 'loop';
+            $additionalAttributes[] = 'loop';
         }
-        foreach (['class', 'dir', 'id', 'lang', 'style', 'title', 'accesskey', 'tabindex', 'onclick'] as $key) {
+        foreach ([
+                     'class',
+                     'dir',
+                     'id',
+                     'lang',
+                     'style',
+                     'title',
+                     'accesskey',
+                     'tabindex',
+                     'onclick',
+                     'preload'
+                 ] as $key) {
             if (!empty($options[$key])) {
-                $attributes[] = $key . '="' . htmlspecialchars($options[$key]) . '"';
+                $additionalAttributes[] = $key . '="' . htmlspecialchars($options[$key]) . '"';
             }
         }
 
@@ -120,10 +125,15 @@ class VideoTagRenderer implements FileRendererInterface
         $cover = $fileObjects[0];
 
         if (!empty($cover)) {
+            $mediaWidth = min($width, $this->getCroppedDimensionalProperty($cover, 'width'));
+                $mediaHeight = floor(
+                    $this->getCroppedDimensionalProperty($cover, 'height') * ($mediaWidth / max($this->getCroppedDimensionalProperty($cover, 'width'), 1))
+                );
+
             try {
                 $defaultProcessConfiguration = [];
-                $defaultProcessConfiguration['width'] = (int)$width;
-                $defaultProcessConfiguration['height'] = (int)$height;
+                $defaultProcessConfiguration['width'] = (int)$mediaWidth;
+                $defaultProcessConfiguration['height'] = (int)$mediaHeight;
                 $defaultProcessConfiguration['crop'] = $this->getCropArea($cover, 'default');
             } catch (\InvalidArgumentException $e) {
                 $defaultProcessConfiguration['crop'] = '';
@@ -135,18 +145,52 @@ class VideoTagRenderer implements FileRendererInterface
                 $defaultProcessConfiguration
             );
 
-            $attributes[] = 'poster=' . $coverProcessed->getPublicUrl();
+            $coverImage = $coverProcessed->getPublicUrl();
         }
 
-        return sprintf(
-            '<video%s><source src="%s" type="%s"></video>',
-            empty($attributes) ? '' : ' ' . implode(' ', $attributes),
+        $content = '';
+        if ($coverImage) {
+            $content .= '<img src="' . $coverImage . '" alt="cover" />';
+        }
+
+        $content .=  sprintf(
+            '<audio%s><source src="%s" type="%s"></audio>',
+            empty($additionalAttributes) ? '' : ' ' . implode(' ', $additionalAttributes),
             htmlspecialchars($file->getPublicUrl($usedPathsRelativeToCurrentScript)),
             $file->getMimeType()
         );
+
+        return $content;
+
+//        return sprintf(
+//            '<audio%s><source src="%s" type="%s"></audio>',
+//            empty($additionalAttributes) ? '' : ' ' . implode(' ', $additionalAttributes),
+//            htmlspecialchars($file->getPublicUrl($usedPathsRelativeToCurrentScript)),
+//            $file->getMimeType()
+//        );
     }
 
         /**
+     * When retrieving the height or width for a media file
+     * a possible cropping needs to be taken into account.
+     *
+     * @param FileInterface $fileObject
+     * @param string $dimensionalProperty 'width' or 'height'
+     *
+     * @return int
+     */
+    protected function getCroppedDimensionalProperty(FileInterface $fileObject, $dimensionalProperty)
+    {
+        if (!$fileObject->hasProperty('crop') || empty($fileObject->getProperty('crop'))) {
+            return $fileObject->getProperty($dimensionalProperty);
+        }
+
+        $croppingConfiguration = $fileObject->getProperty('crop');
+        $cropVariantCollection = CropVariantCollection::create((string)$croppingConfiguration);
+        return (int) $cropVariantCollection->getCropArea('default')->makeAbsoluteBasedOnFile($fileObject)->asArray()[$dimensionalProperty];
+    }
+
+    /**
      * @param FileReference $fileReference
      * @param string $cropVariant
      * @return null|\TYPO3\CMS\Core\Imaging\ImageManipulation\Area

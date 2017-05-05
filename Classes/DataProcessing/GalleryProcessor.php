@@ -16,6 +16,7 @@ namespace ThomasK\Tkmedia\DataProcessing;
 
 use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3\CMS\Core\Resource\FileInterface;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 use TYPO3\CMS\Frontend\ContentObject\Exception\ContentRenderingException;
@@ -458,7 +459,8 @@ class GalleryProcessor implements DataProcessorInterface
                 if (
                     !$mediaWidth
                     || $fileObject->getMimeType() == 'video/youtube'
-                    ||$fileObject->getMimeType() == 'video/youtube'
+                    || $fileObject->getMimeType() == 'video/youtube'
+                    || $fileObject->getMimeType() == 'audio/mpeg'
                 ) {
                     $mediaWidth = $maxMediaWidth;
                 }
