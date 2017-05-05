@@ -126,9 +126,10 @@ class AudioTagRenderer implements FileRendererInterface
 
         if (!empty($cover)) {
             $mediaWidth = min($width, $this->getCroppedDimensionalProperty($cover, 'width'));
-                $mediaHeight = floor(
-                    $this->getCroppedDimensionalProperty($cover, 'height') * ($mediaWidth / max($this->getCroppedDimensionalProperty($cover, 'width'), 1))
-                );
+            $mediaHeight = floor(
+                $this->getCroppedDimensionalProperty($cover,
+                    'height') * ($mediaWidth / max($this->getCroppedDimensionalProperty($cover, 'width'), 1))
+            );
 
             try {
                 $defaultProcessConfiguration = [];
@@ -146,14 +147,28 @@ class AudioTagRenderer implements FileRendererInterface
             );
 
             $coverImage = $coverProcessed->getPublicUrl();
+
+            $retinaProcessConfiguration = $defaultProcessConfiguration;
+            $retinaProcessConfiguration['width'] = $defaultProcessConfiguration['width'] * 2;
+            $retinaProcessConfiguration['height'] = $defaultProcessConfiguration['height'] * 2;
+
+            $retinaProcessed = $cover->process(
+                ProcessedFile::CONTEXT_IMAGECROPSCALEMASK,
+                $retinaProcessConfiguration
+            );
+
+            $retinaImage = $retinaProcessed->getPublicUrl();
         }
 
         $content = '';
+        $srcset = '  sizes="(min-width: 40em) ' . $mediaWidth . 'px, 100vw"';
+        $srcset .= ' srcset="' . $coverImage . ' ' . $mediaWidth . 'w, ' . $retinaImage . ' ' . $mediaWidth * 2 . 'w "';
         if ($coverImage) {
-            $content .= '<img src="' . $coverImage . '" alt="cover" />';
+            $content .= '<img src="' . $coverImage . '" alt="cover" ' . $srcset . ' />';
+
         }
 
-        $content .=  sprintf(
+        $content .= sprintf(
             '<audio%s><source src="%s" type="%s"></audio>',
             empty($additionalAttributes) ? '' : ' ' . implode(' ', $additionalAttributes),
             htmlspecialchars($file->getPublicUrl($usedPathsRelativeToCurrentScript)),
@@ -170,7 +185,7 @@ class AudioTagRenderer implements FileRendererInterface
 //        );
     }
 
-        /**
+    /**
      * When retrieving the height or width for a media file
      * a possible cropping needs to be taken into account.
      *
@@ -187,7 +202,7 @@ class AudioTagRenderer implements FileRendererInterface
 
         $croppingConfiguration = $fileObject->getProperty('crop');
         $cropVariantCollection = CropVariantCollection::create((string)$croppingConfiguration);
-        return (int) $cropVariantCollection->getCropArea('default')->makeAbsoluteBasedOnFile($fileObject)->asArray()[$dimensionalProperty];
+        return (int)$cropVariantCollection->getCropArea('default')->makeAbsoluteBasedOnFile($fileObject)->asArray()[$dimensionalProperty];
     }
 
     /**
