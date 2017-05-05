@@ -89,9 +89,9 @@ class AudioTagRenderer implements FileRendererInterface
         if (!isset($options['controls']) || !empty($options['controls'])) {
             $additionalAttributes[] = 'controls';
         }
-        if (!empty($options['autoplay'])) {
-            $additionalAttributes[] = 'autoplay';
-        }
+//        if (!empty($options['autoplay'])) {
+//            $additionalAttributes[] = 'autoplay';
+//        }
         if (!empty($options['muted'])) {
             $additionalAttributes[] = 'muted';
         }
@@ -113,6 +113,15 @@ class AudioTagRenderer implements FileRendererInterface
             if (!empty($options[$key])) {
                 $additionalAttributes[] = $key . '="' . htmlspecialchars($options[$key]) . '"';
             }
+        }
+
+        $plyr = [];
+        if (!empty($options['autoplay'])) {
+            $plyr["autoplay"] = true;
+        }
+
+        if (!empty($plyr)) {
+            $additionalAttributes[] = 'data-plyr=\'' . json_encode($plyr) .'\'';
         }
 
         //Cover
