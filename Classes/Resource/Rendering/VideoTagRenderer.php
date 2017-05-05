@@ -96,7 +96,7 @@ class VideoTagRenderer implements FileRendererInterface
             $attributes[] = 'controls';
         }
         if (!empty($options['autoplay'])) {
-            $attributes[] = 'autoplay';
+//            $attributes[] = 'autoplay';
         }
         if (!empty($options['muted'])) {
             $attributes[] = 'muted';
@@ -108,6 +108,15 @@ class VideoTagRenderer implements FileRendererInterface
             if (!empty($options[$key])) {
                 $attributes[] = $key . '="' . htmlspecialchars($options[$key]) . '"';
             }
+        }
+
+        $plyr = [];
+        if (!empty($options['autoplay'])) {
+            $plyr["autoplay"] = true;
+        }
+
+        if (!empty($plyr)) {
+            $attributes[] = 'data-plyr=\'' . json_encode($plyr) .'\'';
         }
 
         //Cover
@@ -146,7 +155,7 @@ class VideoTagRenderer implements FileRendererInterface
         );
     }
 
-        /**
+    /**
      * @param FileReference $fileReference
      * @param string $cropVariant
      * @return null|\TYPO3\CMS\Core\Imaging\ImageManipulation\Area

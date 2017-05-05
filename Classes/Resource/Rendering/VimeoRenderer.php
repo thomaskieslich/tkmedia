@@ -21,6 +21,7 @@ use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\OnlineMediaHelperInterface;
 use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\OnlineMediaHelperRegistry;
 use TYPO3\CMS\Core\Resource\Rendering\FileRendererInterface;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Vimeo renderer class
@@ -105,9 +106,9 @@ class VimeoRenderer implements FileRendererInterface
         }
 
         $urlParams = [];
-        if (!empty($options['autoplay'])) {
-            $urlParams[] = 'autoplay=1';
-        }
+//        if (!empty($options['autoplay'])) {
+//            $urlParams[] = 'autoplay=1';
+//        }
         if (!empty($options['loop'])) {
             $urlParams[] = 'loop=1';
         }
@@ -140,7 +141,12 @@ class VimeoRenderer implements FileRendererInterface
             }
         }
 
-        $vimeo = '<div data-type="vimeo" data-video-id="' . $videoId . '"></div>';
+        $plyr = [];
+        if (!empty($options['autoplay'])) {
+            $plyr["autoplay"] = true;
+        }
+
+        $vimeo = '<div data-type="vimeo" data-video-id="' . $videoId . '" data-plyr=\'' . json_encode($plyr) . '\'></div>';
         return $vimeo;
 
 //        return sprintf(

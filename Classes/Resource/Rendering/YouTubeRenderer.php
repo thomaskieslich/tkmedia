@@ -165,7 +165,12 @@ class YouTubeRenderer implements FileRendererInterface
             }
         }
 
-        $plyr = '<div data-type="youtube" data-video-id="' . $videoId . '"></div>';
+        $plyr = [];
+        if (!empty($options['autoplay'])) {
+            $plyr["autoplay"] = true;
+        }
+
+        $plyr = '<div data-type="youtube" data-video-id="' . $videoId . '" data-plyr=\'' . json_encode($plyr) . '\'></div>';
         return $plyr;
 
 //        return sprintf(
