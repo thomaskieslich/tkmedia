@@ -10,29 +10,13 @@ page {
 }
 
 lib.contentElement {
-#  templateRootPaths {
-#    110 = EXT:tkmedia/Resources/Private/Templates/
-#  }
-
   partialRootPaths {
     110 = EXT:tkmedia/Resources/Private/Partials/
   }
 
-#  layoutRootPaths {
-#    110 = EXT:tkmedia/Resources/Private/Layouts/
-#  }
-
   settings {
-    image {
-      small = {$styles.content.textmedia.image.small}
-      medium = {$styles.content.textmedia.image.medium}
-      large = {$styles.content.textmedia.image.large}
-    }
-
     media {
       popup {
-        #                crop.data = file:current:crop
-        #                crop.data >
         linkParams {
           ATagParams.dataWrap = class="{$styles.content.textmedia.linkWrap.lightboxCssClass}" data-lightbox="{$styles.content.textmedia.linkWrap.lightboxDataAttribute}"
         }
@@ -47,8 +31,19 @@ lib.math {
   prioriCalc = 1
 }
 
-
 tt_content.textmedia {
+  settings {
+    srcset {
+      small = {$styles.content.textmedia.image.small}
+      medium = {$styles.content.textmedia.image.medium}
+      large = {$styles.content.textmedia.image.large}
+    }
+    sizes{
+      medium = 40em
+      test = (min-width: 40em) {dimensions.width}px, 100vw
+    }
+  }
+
   dataProcessing {
     10 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
     10 {

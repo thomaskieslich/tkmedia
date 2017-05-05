@@ -4,21 +4,20 @@
 
 <f:if condition="{file.extension} != 'svg'">
 	<f:then>
-		<f:variable name="retina">
-			<f:cObject typoscriptObjectPath="lib.math" data="{dimensions.width}*2"/>w
-		</f:variable>
-
-		<img sizes="(min-width: 40em) {dimensions.width}px, 100vw"
-				 srcset="{f:uri.image(image: file, width: dimensions.width, ratio: ratio)} {dimensions.width}w,
-             {f:uri.image(image: file, width: retina, ratio: ratio)} {retina},
-             {f:uri.image(image: file, width: settings.image.small, ratio: ratio)} {settings.image.small}w,
-             {f:uri.image(image: file, width: settings.image.medium, ratio: ratio)} {settings.image.medium}w,
-             {f:uri.image(image: file, width: settings.image.large, ratio: ratio)} {settings.image.large}w"
-				 src="{f:uri.image(image: file, width: dimensions.width, ratio: ratio)}" alt="{file.alternative}" title="{file.title}">
+		<img src="{f:uri.image(image: file, width: dimensions.width, ratio: ratio)}" alt="{file.alternative}" title="{file.title}" srcset="{f:render(section: 'srcset', arguments: _all)}" sizes="{f:render(section: 'sizes', arguments: _all)}"/>
 	</f:then>
 	<f:else>
 		<f:image image="{file}" width=" {dimensions.width}" alt="{file.alternative}" title="{file.title}"/>
 	</f:else>
 </f:if>
+
+<f:section name="srcset">
+	<f:variable name="retina"><f:cObject typoscriptObjectPath="lib.math" data="{dimensions.width}*2"/></f:variable>
+	<f:uri.image image="{file}" width="{dimensions.width}" ratio="{ratio}" /> {dimensions.width}w, <f:uri.image image="{file}" width="{retina}" ratio="{ratio}" /> {retina}w,
+	<f:for each="{settings.srcset}" as="size" iteration="it">
+		<f:uri.image image="{file}" width="{size}" ratio="{ratio}" /> {size}w{f:if(condition: it.isLast, else: ', ')}
+	</f:for></f:section>
+
+<f:section name="sizes">(min-width: {settings.sizes.medium}) {dimensions.width}px, 100vw</f:section>
 
 </html>

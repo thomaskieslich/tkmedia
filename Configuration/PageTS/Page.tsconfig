@@ -1,0 +1,23 @@
+TCEFORM {
+    tt_content {
+        imagewidth {
+            disabled = 1
+        }
+
+        imageheight {
+            disabled = 1
+        }
+
+        imageborder {
+            disabled = 1
+        }
+
+        imageorient {
+            removeItems = 1,2,9,10
+        }
+
+        imagecols {
+            removeItems = 5,7,8
+        }
+    }
+}
