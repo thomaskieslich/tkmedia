@@ -3,7 +3,7 @@
 
 <f:if condition="{gallery.rows}">
 	<f:variable name="medium-grid-cols">
-		medium-<f:cObject typoscriptObjectPath="lib.math" data="12/{data.imagecols}"/>
+		{settings.columnPrefix.medium}<f:cObject typoscriptObjectPath="lib.math" data="12/{data.imagecols}"/>
 	</f:variable>
 
 	<div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')}">
