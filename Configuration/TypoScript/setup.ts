@@ -38,14 +38,13 @@ tt_content.textmedia {
     }
 
     srcset {
-      small = {$styles.content.textmedia.image.small}
-      medium = {$styles.content.textmedia.image.medium}
-      large = {$styles.content.textmedia.image.large}
+      small = 480
+      medium = 960
+      large = 1280
     }
 
     sizes {
       medium = 40em
-      test = (min-width: 40em) {dimensions.width}px, 100vw
     }
   }
 
