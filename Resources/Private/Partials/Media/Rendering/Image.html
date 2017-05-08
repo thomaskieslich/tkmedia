@@ -1,10 +1,10 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-			xmlns:f="http://typo3.org/ns/ThomasK/Tkmedia/ViewHelpers"
+			xmlns:tk="http://typo3.org/ns/ThomasK/Tkmedia/ViewHelpers"
 			data-namespace-typo3-fluid="true">
 
 <f:if condition="{file.extension} != 'svg'">
 	<f:then>
-		<img src="{f:uri.image(image: file, width: dimensions.width, ratio: ratio)}" alt="{file.alternative}" title="{file.title}" srcset="{f:render(section: 'srcset', arguments: _all)}" sizes="{f:render(section: 'sizes', arguments: _all)}"/>
+		<img src="{tk:uri.image(image: file, width: dimensions.width, ratio: ratio)}" alt="{file.alternative}" title="{file.title}" srcset="{f:render(section: 'srcset', arguments: _all)}" sizes="{f:render(section: 'sizes', arguments: _all)}"/>
 	</f:then>
 	<f:else>
 		<f:image image="{file}" width=" {dimensions.width}" alt="{file.alternative}" title="{file.title}"/>
@@ -13,9 +13,9 @@
 
 <f:section name="srcset">
 	<f:variable name="retina"><f:cObject typoscriptObjectPath="lib.math" data="{dimensions.width}*2"/></f:variable>
-	<f:uri.image image="{file}" width="{dimensions.width}" ratio="{ratio}" /> {dimensions.width}w, <f:uri.image image="{file}" width="{retina}" ratio="{ratio}" /> {retina}w,
+	<tk:uri.image image="{file}" width="{dimensions.width}" ratio="{ratio}" /> {dimensions.width}w, <tk:uri.image image="{file}" width="{retina}" ratio="{ratio}" /> {retina}w,
 	<f:for each="{settings.srcset}" as="size" iteration="it">
-		<f:uri.image image="{file}" width="{size}" ratio="{ratio}" /> {size}w{f:if(condition: it.isLast, else: ', ')}
+		<tk:uri.image image="{file}" width="{size}" ratio="{ratio}" /> {size}w{f:if(condition: it.isLast, else: ', ')}
 	</f:for></f:section>
 
 <f:section name="sizes">(min-width: {settings.sizes.medium}) {dimensions.width}px, 100vw</f:section>
