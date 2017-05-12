@@ -11,3 +11,10 @@ $rendererRegistry->registerRendererClass(\ThomasK\Tkmedia\Resource\Rendering\Vid
 $rendererRegistry->registerRendererClass(\ThomasK\Tkmedia\Resource\Rendering\AudioTagRenderer::class);
 
 unset($rendererRegistry);
+
+
+/**
+ * Register Update
+ */
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update'][\ThomasK\Tkmedia\Updates\AspectratiosUpdate::class]
+    = \ThomasK\Tkmedia\Updates\AspectratiosUpdate::class;
