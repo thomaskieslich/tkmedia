@@ -144,7 +144,7 @@ class VideoTagRenderer implements FileRendererInterface
                 $defaultProcessConfiguration
             );
 
-            $attributes[] = 'poster=' . $coverProcessed->getPublicUrl();
+            $attributes[] = 'poster="/' . $coverProcessed->getPublicUrl().'" ';
         }
 
         return sprintf(

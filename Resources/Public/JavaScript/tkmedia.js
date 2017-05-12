@@ -16,7 +16,7 @@ $(function () {
 		loadSprite: true,
 		iconPrefix: 'plyr',
 		//https://cdn.plyr.io/2.0.11/plyr.svg
-		iconUrl: 'typo3conf/ext/tkmedia/Resources/Public/Icons/plyr.svg',
+		iconUrl: '/typo3conf/ext/tkmedia/Resources/Public/Icons/plyr.svg',
 		clickToPlay: true,
 		hideControls: true,
 		showPosterOnEnd: false,
