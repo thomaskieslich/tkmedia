@@ -2,12 +2,15 @@
 			xmlns:tk="http://typo3.org/ns/ThomasK/Tkmedia/ViewHelpers"
 			data-namespace-typo3-fluid="true">
 
+<f:variable name="alternative"><f:if condition="{file.title} && !{file.alternative}"><f:then>{file.title}</f:then><f:else>{file.alternative}</f:else></f:if></f:variable>
+<f:variable name="title"><f:if condition="!{file.title} && {file.alternative}"><f:then>{file.alternative}</f:then><f:else>{file.title}</f:else></f:if></f:variable>
+
 <f:if condition="{file.extension} != 'svg'">
 	<f:then>
-		<img src="{tk:uri.image(image: file, width: dimensions.width, ratio: ratio)}" alt="{file.alternative}" title="{file.title}" srcset="{f:render(section: 'srcset', arguments: _all)}" sizes="{f:render(section: 'sizes', arguments: _all)}"/>
+		<img src="{tk:uri.image(image: file, width: dimensions.width, ratio: ratio)}" alt="{alternative}" title="{title}" srcset="{f:render(section: 'srcset', arguments: _all)}" sizes="{f:render(section: 'sizes', arguments: _all)}"/>
 	</f:then>
 	<f:else>
-		<f:image image="{file}" width=" {dimensions.width}" alt="{file.alternative}" title="{file.title}"/>
+		<f:image image="{file}" width=" {dimensions.width}" alt="{alternative}" title="{title}"/>
 	</f:else>
 </f:if>
 
