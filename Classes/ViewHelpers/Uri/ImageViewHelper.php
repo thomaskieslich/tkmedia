@@ -74,14 +74,20 @@ class ImageViewHelper extends AbstractViewHelper
     {
         parent::initializeArguments();
         $this->registerArgument('src', 'string', 'src');
-        $this->registerArgument('treatIdAsReference', 'bool', 'given src argument is a sys_file_reference record', false, false);
+        $this->registerArgument('treatIdAsReference', 'bool', 'given src argument is a sys_file_reference record',
+            false, false);
         $this->registerArgument('image', 'object', 'image');
-        $this->registerArgument('crop', 'string|bool', 'overrule cropping of image (setting to FALSE disables the cropping set in FileReference)');
-        $this->registerArgument('cropVariant', 'string', 'select a cropping variant, in case multiple croppings have been specified or stored in FileReference', false, 'default');
+        $this->registerArgument('crop', 'string|bool',
+            'overrule cropping of image (setting to FALSE disables the cropping set in FileReference)');
+        $this->registerArgument('cropVariant', 'string',
+            'select a cropping variant, in case multiple croppings have been specified or stored in FileReference',
+            false, 'default');
         $this->registerArgument('ratio', 'string', 'image aspectratio', false);
 
-        $this->registerArgument('width', 'string', 'width of the image. This can be a numeric value representing the fixed width of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.width for possible options.');
-        $this->registerArgument('height', 'string', 'height of the image. This can be a numeric value representing the fixed height of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.width for possible options.');
+        $this->registerArgument('width', 'string',
+            'width of the image. This can be a numeric value representing the fixed width of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.width for possible options.');
+        $this->registerArgument('height', 'string',
+            'height of the image. This can be a numeric value representing the fixed height of the image in pixels. But you can also perform simple calculations by adding "m" or "c" to the value. See imgResource.width for possible options.');
         $this->registerArgument('minWidth', 'int', 'minimum width of the image');
         $this->registerArgument('minHeight', 'int', 'minimum height of the image');
         $this->registerArgument('maxWidth', 'int', 'maximum width of the image');
@@ -98,8 +104,11 @@ class ImageViewHelper extends AbstractViewHelper
      * @return string
      * @throws Exception
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
-    {
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ) {
         $src = $arguments['src'];
         $image = $arguments['image'];
         $treatIdAsReference = $arguments['treatIdAsReference'];
@@ -117,6 +126,7 @@ class ImageViewHelper extends AbstractViewHelper
             if ($cropString === null && $image->hasProperty('crop') && $image->getProperty('crop')) {
                 $cropString = $image->getProperty('crop');
             }
+
             $cropVariantCollection = CropVariantCollection::create((string)$cropString);
             $cropVariant = $arguments['cropVariant'] ?: 'default';
             $cropArea = $cropVariantCollection->getCropArea($cropVariant);

@@ -40,7 +40,7 @@ tt_content.textmedia {
     srcset {
       small = 480
       medium = 960
-      large = 1280
+      lightbox = 1920
     }
 
     sizes {

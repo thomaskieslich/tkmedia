@@ -1,5 +1,5 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-			xmlns:ce="http://typo3.org/ns/ThomasK/Tkmedia/ViewHelpers"
+			xmlns:tk="http://typo3.org/ns/ThomasK/Tkmedia/ViewHelpers"
 			data-namespace-typo3-fluid="true">
 
 <figure class="image">
@@ -12,9 +12,9 @@
 		<f:else>
 			<f:if condition="{data.image_zoom}">
 				<f:then>
-					<ce:link.clickEnlarge image="{file}" configuration="{settings.media.popup}" current="{data.uid}">
-						<f:render partial="Media/Rendering/Image" arguments="{file: file, dimensions: dimensions, settings: settings, ratio: data.imageratio}"/>
-					</ce:link.clickEnlarge>
+					<a href="{tk:uri.image(image: file, width: settings.srcset.large, crop: 'disable', ratio: '')}" title="{file.title}" class="lightbox" data-lightbox="lb-{data.uid}">
+							<f:render partial="Media/Rendering/Image" arguments="{file: file, dimensions: dimensions, settings: settings, ratio: data.imageratio}"/>
+					</a>
 				</f:then>
 				<f:else>
 					<f:render partial="Media/Rendering/Image" arguments="{file: file, dimensions: dimensions, settings: settings, ratio: data.imageratio}"/>
