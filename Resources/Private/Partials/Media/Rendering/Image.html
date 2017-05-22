@@ -18,7 +18,9 @@
 	<f:variable name="retina"><f:cObject typoscriptObjectPath="lib.math" data="{dimensions.width}*2"/></f:variable>
 	<tk:uri.image image="{file}" width="{dimensions.width}" ratio="{ratio}" /> {dimensions.width}w, <tk:uri.image image="{file}" width="{retina}" ratio="{ratio}" /> {retina}w,
 	<f:for each="{settings.srcset}" as="size" iteration="it">
-		<tk:uri.image image="{file}" width="{size}" ratio="{ratio}" /> {size}w{f:if(condition: it.isLast, else: ', ')}
+		<f:if condition="{dimensions.width} != {size} && {retina} != {size}">
+			<tk:uri.image image="{file}" width="{size}" ratio="{ratio}" /> {size}w{f:if(condition: it.isLast, else: ', ')}
+		</f:if>
 	</f:for></f:section>
 
 <f:section name="sizes">(min-width: {settings.sizes.medium}) {dimensions.width}px, 100vw</f:section>
