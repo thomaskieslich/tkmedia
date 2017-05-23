@@ -18,7 +18,7 @@
 			"homepage": "https://thomaskieslich.de/"
 		}
 	],
-	"version": "8.7.0",
+	"version": "8.7.1",
 	"require": {
 		"typo3/cms-core": "^8.7",
 		"typo3/cms": "^8.7"
