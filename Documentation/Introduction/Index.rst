@@ -20,7 +20,9 @@ Extend the TYPO3 Text/Media Content Element with some features. It is more a pro
    * add plyr.io for better handling and styling of video and audio
 
 .. toctree::
-	:maxdepth: 5
+	:maxdepth: 3
 	:titlesonly:
 
 	Screenshots/Index
+
+
