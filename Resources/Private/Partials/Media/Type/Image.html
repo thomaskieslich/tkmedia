@@ -12,7 +12,7 @@
 		<f:else>
 			<f:if condition="{data.image_zoom}">
 				<f:then>
-					<a href="{tk:uri.image(image: file, width: settings.srcset.large, crop: 'disable', ratio: '')}" title="{file.title}" class="lightbox" data-lightbox="lb-{data.uid}">
+					<a href="{tk:uri.image(image: file, width: settings.srcset.lightbox, crop: 'disable', ratio: '')}" title="{file.title}" class="lightbox" data-lightbox="lb-{data.uid}">
 							<f:render partial="Media/Rendering/Image" arguments="{file: file, dimensions: dimensions, settings: settings, ratio: data.imageratio}"/>
 					</a>
 				</f:then>

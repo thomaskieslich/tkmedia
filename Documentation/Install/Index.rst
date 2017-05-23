@@ -15,7 +15,7 @@ Composer
       }
    ],
    "require": {
-      "thomask/tkmedia": "dev-master as 8.7.0"
+      "thomask/tkmedia": "^8.7.0"
    }
 
 Add TypoScript to root Template.
