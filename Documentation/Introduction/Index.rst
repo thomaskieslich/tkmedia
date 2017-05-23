@@ -7,7 +7,6 @@ Introduction
 
 Extend the TYPO3 Text/Media Content Element with some features. It is more a proof of concept then an Extension.
 
-
 :Author:    Thomas Kieslich <post@thomaskieslich.de>
 :License:   MIT license
 :Rendered:  |today|
