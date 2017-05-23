@@ -39,3 +39,15 @@ $GLOBALS['TCA']['sys_file_reference']['columns']['crop']['config']['cropVariants
     $additionalCropVariants
 );
 
+$GLOBALS['TCA']['tt_content']['types']['textmedia']['columnsOverrides'] = [
+    'assets' => [
+        'config' => [
+            'appearance' => [
+                'headerThumbnail' => [
+                    'width' => '100',
+                    'height' => '100c'
+                ]
+            ]
+        ]
+    ]
+];
