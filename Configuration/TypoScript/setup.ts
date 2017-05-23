@@ -13,16 +13,6 @@ lib.contentElement {
   partialRootPaths {
     110 = EXT:tkmedia/Resources/Private/Partials/
   }
-
-  settings {
-    media {
-      popup {
-        linkParams {
-          ATagParams.dataWrap = class="{$styles.content.textmedia.linkWrap.lightboxCssClass}" data-lightbox="{$styles.content.textmedia.linkWrap.lightboxDataAttribute}"
-        }
-      }
-    }
-  }
 }
 
 lib.math = TEXT
