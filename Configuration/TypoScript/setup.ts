@@ -11,7 +11,7 @@ page {
 
 lib.contentElement {
   partialRootPaths {
-    110 = EXT:tkmedia/Resources/Private/Partials/
+    99 = EXT:tkmedia/Resources/Private/Partials/
   }
 }
 

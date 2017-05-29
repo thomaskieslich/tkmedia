@@ -1,18 +1,18 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-			data-namespace-typo3-fluid="true">
+		data-namespace-typo3-fluid="true">
 
 <f:if condition="{gallery.rows}">
 	<f:variable name="medium-grid-cols">
 		{settings.columnPrefix.medium}<f:cObject typoscriptObjectPath="lib.math" data="12/{data.imagecols}"/>
 	</f:variable>
 
-	<div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')}">
+	<div class="ce-gallery{f:if(condition: data.imageborder, then: ' ce-border')}" data-ce-columns="{gallery.count.columns}" data-ce-images="{gallery.count.files}">
 		<f:for each="{gallery.rows}" as="row">
 			<div class="ce-row">
 				<f:for each="{row.columns}" as="column">
 					<f:if condition="{column.media}">
 						<div class="ce-column {medium-grid-cols}">
-							<f:render partial="Media/Type" arguments="{file: column.media, dimensions: column.dimensions, data: data, settings: settings}"/>
+							<f:render partial="Media/Type" arguments="{file: column.media, dimensions: column.dimensions, data: data, settings: settings}" />
 						</div>
 					</f:if>
 				</f:for>
