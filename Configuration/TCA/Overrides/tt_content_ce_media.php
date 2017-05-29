@@ -37,3 +37,13 @@ foreach ($aspectvalues as $value) {
     'imageratio',
     'before:imagecols'
 );
+
+/***************
+ * change media preview size
+ */
+$GLOBALS['TCA']['tt_content']['types']['textmedia']['columnsOverrides']['assets']['config']['appearance'] = [
+    'headerThumbnail' => [
+        'width' => '100',
+        'height' => '100c'
+    ]
+];
