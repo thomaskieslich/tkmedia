@@ -17,6 +17,7 @@ namespace ThomasK\Tkmedia\Updates;
 
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
+use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -38,19 +39,29 @@ class AspectratiosUpdate extends \TYPO3\CMS\Install\Updates\AbstractUpdate
      */
     public function checkForUpdate(&$description)
     {
-        if ($this->isWizardDone()) {
-            return false;
+        $oldField = 'tx_tkmedia_aspectratio';
+        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionByName('Default');
+        $statement = $connection->query('SHOW FULL COLUMNS FROM tt_content');
+        $fields = [];
+        while ($fieldRow = $statement->fetch()) {
+            $fields[$fieldRow['Field']] = $fieldRow;
         }
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tt_content');
-        $queryBuilder->getRestrictions()->removeAll()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
-        $elementCount = $queryBuilder->count('uid')
-            ->from('tt_content')
-            ->where(
-                $queryBuilder->expr()->isNotNull('tx_tkmedia_aspectratio')
-            )
-            ->execute()->fetchColumn(0);
 
-        return (bool)$elementCount;
+        if ($this->isWizardDone() || !array_key_exists($oldField, $fields)) {
+            return false;
+        } else {
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tt_content');
+            $queryBuilder->getRestrictions()->removeAll()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+            $elementCount = $queryBuilder->count('uid')
+                ->from('tt_content')
+                ->where(
+                    $queryBuilder->expr()->isNotNull('tx_tkmedia_aspectratio')
+                )
+                ->execute()->fetchColumn(0);
+
+            return (bool)$elementCount;
+        }
+
     }
 
     /**
