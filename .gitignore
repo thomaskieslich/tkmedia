@@ -15,8 +15,8 @@ nbproject
 .editorconfig
 
 # Ignore build stuff
-Build/bower_components/*
-Build/node_modules/*
+/Build/bower_components/*
+/Build/node_modules/*
 
 .cache
 .sass-cache
