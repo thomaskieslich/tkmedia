@@ -15,7 +15,6 @@ $(function () {
         displayDuration: false,
         loadSprite: true,
         iconPrefix: 'plyr',
-        //https://cdn.plyr.io/2.0.11/plyr.svg
         iconUrl: '/typo3conf/ext/tkmedia/Resources/Public/Icons/plyr.svg',
         clickToPlay: true,
         hideControls: true,
@@ -27,7 +26,7 @@ $(function () {
         },
         tooltips: {
             controls: false,
-            seek: true
+            seek: false
         },
         captions: {
             defaultActive: false
@@ -68,8 +67,12 @@ function initPlayers(players) {
             });
         });
         var containerWidth = $(container).width();
+        var mediaType = player.getType();
 
-        if (containerWidth <= 290) {
+        if (
+            containerWidth <= 290
+            && mediaType !== 'audio'
+        ) {
             player.on('ready', function (event) {
                 var target = event.target;
                 $('.plyr__controls [data-plyr="play"]', target).hide();
